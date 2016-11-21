@@ -713,7 +713,7 @@ For more information on this, and how to apply and follow the GNU AGPL, see
 &lt;http://www.gnu.org/licenses/&gt;.<br/>\n".
 "</p>\n".
 "<p class=\"".$cssClassLicensefull."\">\n".
-"Copyright (c) 2015-2016 Terrill Dent<br/>
+"Copyright (c) 2015-2016 Terrill Dent, Stephan Kreutzer<br/>
 <br/>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \"Software\"), to deal

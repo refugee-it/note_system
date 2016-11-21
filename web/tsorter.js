@@ -70,7 +70,7 @@ var tsorter = (function()
          * @param oTH - the table header cell (<th>) object that is clicked
          */
         sort: function( e )
-        {   
+        {
             var that = this,
                 th = e.target;
 
@@ -80,7 +80,14 @@ var tsorter = (function()
 
             // set the data retrieval function for this column 
             that.column = th.cellIndex;
-            that.get = that.getAccessor( th.getAttribute('tsorter:data-tsorter') );
+
+            var attributeDataTsorter = th.getAttribute('tsorter:data-tsorter');
+
+            if (attributeDataTsorter == null || attributeDataTsorter === "") {
+                attributeDataTsorter = th.getAttribute('data-tsorter');
+            }
+
+            that.get = that.getAccessor( attributeDataTsorter );
 
             if( that.prevCol === that.column )
             {
@@ -99,7 +106,7 @@ var tsorter = (function()
             }
             that.prevCol = that.column;
         },
-        
+
         /* 
          * Choose Data Accessor Function
          * @param: the html structure type (from the data-type attribute)
@@ -138,7 +145,7 @@ var tsorter = (function()
                         return 0;
                     };
                 default: /* Plain Text */
-                    return function(row){  
+                    return function(row){
                         return that.getCell(row).firstChild.nodeValue.toLowerCase();
                     };
             }
@@ -169,7 +176,7 @@ var tsorter = (function()
                 }
             }
         },
-        
+
         /* 
          * REVERSE TABLE
          * Reverses a table ordering
@@ -195,23 +202,23 @@ var tsorter = (function()
                 that = this;
 
             if( hi <= lo+1 ){ return; }
-             
+
             if( (hi - lo) === 2 ) {
                 if(that.get(hi-1) > that.get(lo)) {
                     that.exchange(hi-1, lo);   
                 }
                 return;
             }
-            
+
             i = lo + 1;
             j = hi - 1;
-            
+
             if( that.get(lo) > that.get( i) ){ that.exchange( i, lo); }
             if( that.get( j) > that.get(lo) ){ that.exchange(lo,  j); }
             if( that.get(lo) > that.get( i) ){ that.exchange( i, lo); }
-            
+
             pivot = that.get(lo);
-            
+
             while(true) {
                 j--;
                 while(pivot > that.get(j)){ j--; }
@@ -221,7 +228,7 @@ var tsorter = (function()
                 that.exchange(i, j);
             }
             that.exchange(lo, j);
-            
+
             if((j-lo) < (hi-j)) {
                 that.quicksort(lo, j);
                 that.quicksort(j+1, hi);
