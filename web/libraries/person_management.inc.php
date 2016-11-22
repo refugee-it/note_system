@@ -29,6 +29,9 @@ require_once(dirname(__FILE__)."/database.inc.php");
 
 function GetPersons()
 {
+    require_once(dirname(__FILE__)."/logging.inc.php");
+    logEvent("GetPersons().");
+
     if (Database::Get()->IsConnected() !== true)
     {
         return -1;

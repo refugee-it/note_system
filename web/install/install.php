@@ -505,6 +505,42 @@ else if ($step == 3)
                 }
             }
 
+            // Table logs
+
+            if ($success === true)
+            {
+                if ($dropExistingTables === true)
+                {
+                    if (Database::Get()->ExecuteUnsecure("DROP TABLE IF EXISTS `".Database::Get()->GetPrefix()."logs`") !== true)
+                    {
+                        $success = false;
+                    }
+                }
+            }
+
+            if ($success === true)
+            {
+                $sql = "CREATE TABLE ";
+
+                if ($keepExistingTables === true)
+                {
+                    $sql .= "IF NOT EXISTS ";
+                }
+
+                $sql .= "`".Database::Get()->GetPrefix()."logs` (".
+                        "  `id` int(11) NOT NULL AUTO_INCREMENT,".
+                        "  `datetime` datetime NOT NULL,".
+                        "  `text` varchar(255) COLLATE utf8_bin NOT NULL,".
+                        "  `id_user` int(11) NOT NULL,".
+                        "  PRIMARY KEY (`id`)".
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
+
+                if (Database::Get()->ExecuteUnsecure($sql) !== true)
+                {
+                    $success = false;
+                }
+            }
+
 
             if ($success === true)
             {

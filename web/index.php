@@ -29,8 +29,20 @@ if (empty($_SESSION) === true)
     @session_start();
 }
 
-if (isset($_POST['logout']) === true)
+if (isset($_POST['logout']) === true &&
+    isset($_SESSION['user_id']) === true)
 {
+    require_once("./libraries/logging.inc.php");
+
+    if (isset($_SESSION['user_name']) === true)
+    {
+        logEvent("User '".$_SESSION['user_name']."' logged out.");
+    }
+    else
+    {
+        logEvent("User ".((int)$_SESSION['user_id'])." logged out.");
+    }
+
     $language = null;
 
     if (isset($_SESSION['language']) === true)
@@ -243,6 +255,9 @@ else
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $_POST['name'];
         $_SESSION['user_role'] = $user['role'];
+
+        require_once("./libraries/logging.inc.php");
+        logEvent("User '".$_POST['name']."' logged in.");
 
         echo "        <div class=\"mainbox\">\n".
              "          <div class=\"mainbox_body\">\n".
