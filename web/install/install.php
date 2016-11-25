@@ -24,6 +24,8 @@
 
 
 
+require_once("../libraries/https.inc.php");
+
 require_once("../libraries/languagelib.inc.php");
 require_once(getLanguageFile("install"));
 
@@ -530,7 +532,7 @@ else if ($step == 3)
                 $sql .= "`".Database::Get()->GetPrefix()."logs` (".
                         "  `id` int(11) NOT NULL AUTO_INCREMENT,".
                         "  `datetime` datetime NOT NULL,".
-                        "  `text` varchar(255) COLLATE utf8_bin NOT NULL,".
+                        "  `text` text COLLATE utf8_bin NOT NULL,".
                         "  `id_user` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";

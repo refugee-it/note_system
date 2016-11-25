@@ -24,6 +24,8 @@
 
 
 
+require_once("./libraries/https.inc.php");
+
 session_start();
 
 if (isset($_SESSION['user_id']) !== true)
@@ -122,6 +124,11 @@ if (is_array($persons) === true)
 
 echo "              </tbody>\n".
      "            </table>\n".
+     "            <form action=\"person_add.php\" method=\"post\" class=\"noprint\">\n".
+     "              <fieldset class=\"noprint\">\n".
+     "                <input type=\"submit\" value=\"".LANG_BUTTON_ADDPERSON."\"  class=\"noprint\"/><br/>\n".
+     "              </fieldset>\n".
+     "            </form>\n".
      "            <form action=\"index.php\" method=\"post\" class=\"noprint\">\n".
      "              <fieldset class=\"noprint\">\n".
      "                <input type=\"submit\" value=\"".LANG_BUTTON_MAINPAGE."\"  class=\"noprint\"/><br/>\n".

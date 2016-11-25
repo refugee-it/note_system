@@ -29,12 +29,22 @@ require_once(dirname(__FILE__)."/database.inc.php");
 
 function GetPersons()
 {
-    require_once(dirname(__FILE__)."/logging.inc.php");
-    logEvent("GetPersons().");
-
     if (Database::Get()->IsConnected() !== true)
     {
         return -1;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("GetPersons().") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
     }
 
     $persons = Database::Get()->QueryUnsecure("SELECT `id`,\n".
@@ -46,14 +56,67 @@ function GetPersons()
                                               "FROM `".Database::Get()->GetPrefix()."persons`\n".
                                               "WHERE 1");
 
-    if (is_array($persons) === true)
+    if (is_array($persons) !== true)
     {
-        return $persons;
+        Database::Get()->RollbackTransaction();
+        return -4;
     }
 
-    return null;
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -5;
+    }
+
+    return $persons;
 }
 
+function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nationality)
+{
+    /** @todo Check for empty parameters. */
+
+    $nationality = 0;
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("InsertNewPerson('".$familyName."', '".$givenName."', '".$dateOfBirth."', '".$location."', ".((int)$nationality).").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    $id = Database::Get()->Insert("INSERT INTO `".Database::Get()->GetPrefix()."persons` (`id`,\n".
+                                  "    `family_name`,\n".
+                                  "    `given_name`,\n".
+                                  "    `date_of_birth`,\n".
+                                  "    `location`,\n".
+                                  "    `nationality`)\n".
+                                  "VALUES (?, ?, ?, ?, ?, ?)\n",
+                                  array(NULL, $familyName, $givenName, $dateOfBirth, $location, $nationality),
+                                  array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT));
+
+    if ($id <= 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -5;
+    }
+
+    return $id;
+}
 
 
 ?>

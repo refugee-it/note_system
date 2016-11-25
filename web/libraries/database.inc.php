@@ -453,6 +453,8 @@ class Database
             return true;
         }
 
+        $this->pdo->rollBack();
+
         return false;
     }
 

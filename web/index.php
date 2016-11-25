@@ -24,6 +24,8 @@
 
 
 
+require_once("./libraries/https.inc.php");
+
 if (empty($_SESSION) === true)
 {
     @session_start();

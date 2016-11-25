@@ -66,7 +66,6 @@ function insertNewUser($name, $password, $email, $role)
         return $id;
     }
 
-    Database::Get()->RollbackTransaction();
     return -7;
 }
 

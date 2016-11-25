@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2016  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,23 +16,25 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/persons.lang.php
+ * @file $/web/lang/de/person_add.lang.php
  * @author Stephan Kreutzer
- * @since 2014-05-31
+ * @since 2016-11-23
  */
 
 
 
-define("LANG_PAGETITLE", "Personen");
-define("LANG_HEADER", "Personen");
-define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Nachname");
-define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Vorname");
-define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Geburtsdatum");
-define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort");
-define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität");
-define("LANG_BUTTON_ADDPERSON", "Person hinzufügen");
-define("LANG_BUTTON_MAINPAGE", "Verlassen");
+define("LANG_PAGETITLE", "Person hinzufügen");
+define("LANG_HEADER", "Person hinzufügen");
+define("LANG_FAMILYNAMEFIELD_CAPTION", "Nachname");
+define("LANG_GIVENNAMEFIELD_CAPTION", "Vorname");
+define("LANG_DATEOFBIRTHFIELD_CAPTION", "Geburtsdatum (JJJJ-MM-DD)");
+define("LANG_LOCATIONFIELD_CAPTION", "Wohnort");
+define("LANG_NATIONALITYFIELD_CAPTION", "Nationalität");
+define("LANG_SUBMITBUTTON", "Bestätigen");
+define("LANG_OPERATIONSUCCEEDED", "Person erfolgreich hinzugefügt.");
+define("LANG_OPERATIONFAILED", "Person konnte nicht hinzugefügt werden.");
+define("LANG_AGAIN", "Weitere Person hinzufügen");
+define("LANG_BACK", "Zurück");
 define("LANG_LICENSE", "Lizenzierung");
 
 

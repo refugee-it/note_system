@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2016 Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,24 +16,28 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/persons.lang.php
+ * @file $/web/libraries/https.inc.php
  * @author Stephan Kreutzer
- * @since 2014-05-31
+ * @since 2016-10-23
  */
 
 
 
-define("LANG_PAGETITLE", "Personen");
-define("LANG_HEADER", "Personen");
-define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Nachname");
-define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Vorname");
-define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Geburtsdatum");
-define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort");
-define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität");
-define("LANG_BUTTON_ADDPERSON", "Person hinzufügen");
-define("LANG_BUTTON_MAINPAGE", "Verlassen");
-define("LANG_LICENSE", "Lizenzierung");
+$https = false;
+
+if (isset($_SERVER['HTTPS']) === true)
+{
+    if ($_SERVER['HTTPS'] === "on")
+    {
+        $https = true;
+    }
+}
+
+if ($https !== true)
+{
+    header("Location: https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], true, 302);
+    exit(-1);
+}
 
 
 
