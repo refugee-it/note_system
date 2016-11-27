@@ -31,8 +31,10 @@ define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Given Name");
 define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Date of Birth");
 define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Location");
 define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationality");
-define("LANG_BUTTON_ADDPERSON", "Add person");
-define("LANG_BUTTON_MAINPAGE", "Leave");
+define("LANG_TABLECOLUMNCAPTION_ACTION", "Action");
+define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
+define("LANG_LINKCAPTION_ADDPERSON", "Add person");
+define("LANG_LINKCAPTION_MAINPAGE", "Leave");
 define("LANG_LICENSE", "Licensing");
 
 

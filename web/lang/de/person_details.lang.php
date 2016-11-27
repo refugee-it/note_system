@@ -16,25 +16,22 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/persons.lang.php
+ * @file $/web/lang/de/person_details.lang.php
  * @author Stephan Kreutzer
- * @since 2014-05-31
+ * @since 2016-11-26
  */
 
 
 
-define("LANG_PAGETITLE", "Personen");
-define("LANG_HEADER", "Personen");
-define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Nachname");
-define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Vorname");
-define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Geburtsdatum");
-define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort");
-define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität");
-define("LANG_TABLECOLUMNCAPTION_ACTION", "Aktion");
-define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
-define("LANG_LINKCAPTION_ADDPERSON", "Person hinzufügen");
-define("LANG_LINKCAPTION_MAINPAGE", "Verlassen");
+define("LANG_PAGETITLE", "Person");
+define("LANG_HEADER", "Person");
+define("LANG_TABLECOLUMNCAPTION_ID", "Id:");
+define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Nachname:");
+define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Vorname:");
+define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Geburtsdatum:");
+define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort:");
+define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität:");
+define("LANG_LINKCAPTION_PERSONS", "Verlassen");
 define("LANG_LICENSE", "Lizenzierung");
 
 

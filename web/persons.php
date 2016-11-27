@@ -54,11 +54,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n".
      "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:tsorter=\"http://www.terrill.ca/sorting\" xml:lang=\"".getCurrentLanguage()."\" lang=\"".getCurrentLanguage()."\">\n".
      "    <head>\n".
+     "        <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>\n".
      "        <title>".LANG_PAGETITLE."</title>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"mainstyle.css\"/>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"mainstyle_print.css\"/>\n".
-     "        <meta http-equiv=\"expires\" content=\"1296000\"/>\n".
-     "        <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>\n".
+     "        <link rel=\"profile\" href=\"http://microformats.org/profile/hcard\"/>\n".
      "        <script type=\"text/javascript\" src=\"tsorter.js\"></script>\n".
      "        <script type=\"text/javascript\">\n".
      "          window.onload = function() {\n".
@@ -88,7 +88,8 @@ echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNC
 
 if ($displayNonpublicData === true)
 {
-    echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_NATIONALITY."</th>\n";
+    echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_NATIONALITY."</th>\n".
+         "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_ACTION."</th>\n";
 }
 
 echo "                </tr>\n".
@@ -99,23 +100,46 @@ $persons = GetPersons();
 
 if (is_array($persons) === true)
 {
+    $nationalities = null;
+
+    if ($displayNonpublicData === true)
+    {
+        require_once("./custom/nationality.inc.php");
+        $nationalities = GetNationalityDefinitions();
+    }
+
     foreach ($persons as $person)
     {
-        echo "                <tr>\n".
+        echo "                <tr class=\"vcard\">\n".
              "                  <td>".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
-             "                  <td>".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
-             "                  <td>".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+             "                  <td class=\"family-name\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
+             "                  <td class=\"given-name\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
 
         if ($displayNonpublicData === true)
         {
-            echo "                  <td>".htmlspecialchars($person['date_of_birth'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+            echo "                  <td class=\"bday\">".htmlspecialchars($person['date_of_birth'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
         }
 
         echo "                  <td>".htmlspecialchars($person['location'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
 
         if ($displayNonpublicData === true)
         {
-            echo "                  <td>".htmlspecialchars($person['nationality'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+            $nationality = (int)$person['nationality'];
+
+            if (is_array($nationalities) === true)
+            {
+                if (empty($nationalities) != true)
+                {
+                    if ($nationality >= 0 &&
+                        $nationality < count($nationalities))
+                    {
+                        $nationality = GetNationalityDisplayName($nationalities[$nationality]);
+                    }
+                }
+            }
+
+            echo "                  <td>".$nationality."</td>\n".
+                 "                  <td class=\"noprint\"><a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a></td>\n";
         }
 
         echo "                </tr>\n";
@@ -124,16 +148,8 @@ if (is_array($persons) === true)
 
 echo "              </tbody>\n".
      "            </table>\n".
-     "            <form action=\"person_add.php\" method=\"post\" class=\"noprint\">\n".
-     "              <fieldset class=\"noprint\">\n".
-     "                <input type=\"submit\" value=\"".LANG_BUTTON_ADDPERSON."\"  class=\"noprint\"/><br/>\n".
-     "              </fieldset>\n".
-     "            </form>\n".
-     "            <form action=\"index.php\" method=\"post\" class=\"noprint\">\n".
-     "              <fieldset class=\"noprint\">\n".
-     "                <input type=\"submit\" value=\"".LANG_BUTTON_MAINPAGE."\"  class=\"noprint\"/><br/>\n".
-     "              </fieldset>\n".
-     "            </form>\n".
+     "            <a href=\"person_add.php\" class=\"noprint\">".LANG_LINKCAPTION_ADDPERSON."</a>\n".
+     "            <a href=\"index.php\" class=\"noprint\">".LANG_LINKCAPTION_MAINPAGE."</a>\n".
      "          </div>\n".
      "        </div>\n".
      "        <div class=\"footerbox\">\n".

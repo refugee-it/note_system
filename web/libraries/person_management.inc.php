@@ -70,28 +70,90 @@ function GetPersons()
     return $persons;
 }
 
-function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nationality)
-{
-    /** @todo Check for empty parameters. */
 
-    $nationality = 0;
+function GetPersonById($id)
+{
+    if (is_numeric($id) !== true)
+    {
+        return -1;
+    }
 
     if (Database::Get()->IsConnected() !== true)
     {
-        return -1;
+        return -2;
     }
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
     if (Database::Get()->BeginTransaction() !== true)
     {
+        return -3;
+    }
+
+    if (logEvent("GetPersonById(".$id.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -5;
+    }
+
+    $person = Database::Get()->Query("SELECT `id`,\n".
+                                     "    `family_name`,\n".
+                                     "    `given_name`,\n".
+                                     "    `date_of_birth`,\n".
+                                     "    `location`,\n".
+                                     "    `nationality`\n".
+                                     "FROM `".Database::Get()->GetPrefix()."persons`\n".
+                                     "WHERE `id`=?",
+                                     array($id),
+                                     array(Database::TYPE_INT));
+
+    if (is_array($person) !== true)
+    {
+        return -6;
+    }
+
+    if (empty($person) == true)
+    {
+        return -7;
+    }
+
+    return $person[0];
+}
+
+function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nationality)
+{
+    /** @todo Check for empty parameters. */
+
+    $nationality = (int)$nationality;
+
+    require_once(dirname(__FILE__)."/../custom/nationality.inc.php");
+
+    if ($nationality < 0 || $nationality > count(GetNationalityDefinitions()) - 1)
+    {
+        return -1;
+    }
+
+    if (Database::Get()->IsConnected() !== true)
+    {
         return -2;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -3;
     }
 
     if (logEvent("InsertNewPerson('".$familyName."', '".$givenName."', '".$dateOfBirth."', '".$location."', ".((int)$nationality).").") != 0)
     {
         Database::Get()->RollbackTransaction();
-        return -3;
+        return -4;
     }
 
     $id = Database::Get()->Insert("INSERT INTO `".Database::Get()->GetPrefix()."persons` (`id`,\n".
@@ -107,12 +169,12 @@ function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nati
     if ($id <= 0)
     {
         Database::Get()->RollbackTransaction();
-        return -4;
+        return -5;
     }
 
     if (Database::Get()->CommitTransaction() !== true)
     {
-        return -5;
+        return -6;
     }
 
     return $id;

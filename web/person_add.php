@@ -127,7 +127,7 @@ if ($familyName !== null ||
 {
     require_once("./libraries/person_management.inc.php");
 
-    $id = InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, 0);
+    $id = InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, (int)$nationality);
 
     if ($id > 0)
     {
@@ -182,9 +182,32 @@ if ($createSuccess !== true)
         echo "              <input type=\"text\" name=\"date_of_birth\" value=\"".htmlspecialchars($dateOfBirth, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_DATEOFBIRTHFIELD_CAPTION."<br/>\n";
     }
 
-    echo "              <input type=\"text\" name=\"location\" value=\"".htmlspecialchars($location, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_LOCATIONFIELD_CAPTION."<br/>\n".
-         "              <input type=\"hidden\" name=\"nationality\" value=\"0\"/>\n".
-         "              <input type=\"submit\" name=\"save\" value=\"".LANG_SUBMITBUTTON."\"/>\n".
+    echo "              <input type=\"text\" name=\"location\" value=\"".htmlspecialchars($location, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_LOCATIONFIELD_CAPTION."<br/>\n";
+
+    if ($displayNonpublicData === true)
+    {
+        echo "              <select name=\"nationality\" size=\"1\">\n";
+
+        require_once("./custom/nationality.inc.php");
+
+        $nationalities = GetNationalityDefinitions();
+
+        foreach ($nationalities as $id => $value)
+        {
+            echo "                <option value=\"".$id."\"";
+
+            if ((int)$nationality === (int)$id)
+            {
+                echo " selected=\"selected\"";
+            }
+
+            echo ">".GetNationalityDisplayName($value)."</option>\n";
+        }
+
+        echo "              </select>\n";
+    }
+
+    echo "              <input type=\"submit\" name=\"save\" value=\"".LANG_SUBMITBUTTON."\"/>\n".
          "            </fieldset>\n".
          "          </form>\n".
          "        </div>\n".

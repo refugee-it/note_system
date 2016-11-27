@@ -118,3 +118,39 @@ fieldset
     color: red;
 }
 
+.table
+{
+    display: table;
+}
+
+.tr
+{
+    display: table-row;
+}
+
+.thead
+{
+    display: table-header-group;
+}
+
+.tbody
+{
+     display: table-row-group;
+}
+
+.tfoot
+{
+    display: table-footer-group;
+}
+
+.th
+{
+    display: table-cell;
+    font-weight: bold;
+}
+
+.td
+{
+    display: table-cell;
+}
+
