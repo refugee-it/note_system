@@ -462,6 +462,8 @@ else if ($step == 3)
                         "  `date_of_birth` date,".
                         "  `location` varchar(255) COLLATE utf8_bin,".
                         "  `nationality` int(11),".
+                        "  `datetime_created` datetime NOT NULL,".
+                        "  `datetime_modified` datetime NOT NULL,".
                         "  PRIMARY KEY (`id`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
 
@@ -495,8 +497,9 @@ else if ($step == 3)
 
                 $sql .= "`".Database::Get()->GetPrefix()."notes` (".
                         "  `id` int(11) NOT NULL AUTO_INCREMENT,".
-                        "  `description` text COLLATE utf8_bin NOT NULL,".
+                        "  `text` text COLLATE utf8_bin NOT NULL,".
                         "  `datetime_created` datetime NOT NULL,".
+                        "  `datetime_modified` datetime NOT NULL,".
                         "  `id_person` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";

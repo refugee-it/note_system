@@ -52,7 +52,9 @@ function GetPersons()
                                               "    `given_name`,\n".
                                               "    `date_of_birth`,\n".
                                               "    `location`,\n".
-                                              "    `nationality`\n".
+                                              "    `nationality`,\n".
+                                              "    `datetime_created`,\n".
+                                              "    `datetime_modified`\n".
                                               "FROM `".Database::Get()->GetPrefix()."persons`\n".
                                               "WHERE 1");
 
@@ -106,7 +108,9 @@ function GetPersonById($id)
                                      "    `given_name`,\n".
                                      "    `date_of_birth`,\n".
                                      "    `location`,\n".
-                                     "    `nationality`\n".
+                                     "    `nationality`,\n".
+                                     "    `datetime_created`,\n".
+                                     "    `datetime_modified`\n".
                                      "FROM `".Database::Get()->GetPrefix()."persons`\n".
                                      "WHERE `id`=?",
                                      array($id),
@@ -161,8 +165,10 @@ function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nati
                                   "    `given_name`,\n".
                                   "    `date_of_birth`,\n".
                                   "    `location`,\n".
-                                  "    `nationality`)\n".
-                                  "VALUES (?, ?, ?, ?, ?, ?)\n",
+                                  "    `nationality`,\n".
+                                  "    `datetime_created`,\n".
+                                  "    `datetime_modified`)\n".
+                                  "VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())\n",
                                   array(NULL, $familyName, $givenName, $dateOfBirth, $location, $nationality),
                                   array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT));
 
