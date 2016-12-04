@@ -34,7 +34,7 @@ define("LANG_SUBMITBUTTON", "OK");
 define("LANG_OPERATIONSUCCEEDED", "Person added successfully.");
 define("LANG_OPERATIONFAILED", "Was unable to add the person.");
 define("LANG_AGAIN", "Add another person");
-define("LANG_BACK", "Back");
+define("LANG_BACK", "Cancel");
 define("LANG_LICENSE", "Licensing");
 
 

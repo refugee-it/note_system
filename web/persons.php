@@ -33,6 +33,11 @@ if (isset($_SESSION['user_id']) !== true)
     exit(-1);
 }
 
+if (isset($_SESSION['user_role']) !== true)
+{
+    exit(-1);
+}
+
 
 
 require_once("./libraries/languagelib.inc.php");
@@ -42,8 +47,7 @@ require_once("./libraries/user_defines.inc.php");
 
 $displayNonpublicData = false;
 
-if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-    (int)$_SESSION['user_role'] === USER_ROLE_USER)
+if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
 {
     $displayNonpublicData = true;
 }
@@ -88,8 +92,18 @@ echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNC
 
 if ($displayNonpublicData === true)
 {
-    echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_NATIONALITY."</th>\n".
-         "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_ACTION."</th>\n";
+    echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_NATIONALITY."</th>\n";
+}
+
+if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+{
+    echo "                  <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_STATUS."</th>\n";
+}
+
+if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
+    (int)$_SESSION['user_role'] === USER_ROLE_USER)
+{
+    echo "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_ACTION."</th>\n";
 }
 
 echo "                </tr>\n".
@@ -110,6 +124,12 @@ if (is_array($persons) === true)
 
     foreach ($persons as $person)
     {
+        if ((int)$_SESSION['user_role'] != USER_ROLE_ADMIN &&
+            (int)$person['status'] != PERSON_STATUS_ACTIVE)
+        {
+            continue;
+        }
+
         echo "                <tr class=\"vcard\">\n".
              "                  <td>".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
              "                  <td class=\"family-name\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
@@ -138,8 +158,18 @@ if (is_array($persons) === true)
                 }
             }
 
-            echo "                  <td>".$nationality."</td>\n".
-                 "                  <td class=\"noprint\"><a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a></td>\n";
+            echo "                  <td>".$nationality."</td>\n";
+        }
+
+        if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+        {
+            echo "                  <td>".$person['status']."</td>\n";
+        }
+
+        if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
+            (int)$_SESSION['user_role'] === USER_ROLE_USER)
+        {
+            echo "                  <td class=\"noprint\"><a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a></td>\n";
         }
 
         echo "                </tr>\n";

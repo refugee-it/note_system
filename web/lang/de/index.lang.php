@@ -35,9 +35,12 @@ define("LANG_SUBMITBUTTON", "Bestätigen");
 define("LANG_DBCONNECTFAILED", "Problem beim Zugriff auf die Datenbank.");
 define("LANG_LOGINSUCCESS", "Die Anmeldung war erfolgreich!");
 define("LANG_LOGINFAILED", "Die Anmeldung war nicht erfolgreich!");
-define("LANG_CONTINUEBUTTON", "Weiter");
+define("LANG_LINKCAPTION_PERSONS", "Personen");
+define("LANG_LINKCAPTION_CONTINUE", "Weiter");
 define("LANG_BUTTON_LOGOUT", "Abmelden");
-define("LANG_RETRYLOGINBUTTON", "Erneut versuchen");
+define("LANG_LINKCAPTION_RETRYLOGIN", "Erneut versuchen");
+define("LANG_LINKCAPTION_ADMINUSERCREATE", "Neuen Benutzer anlegen");
+define("LANG_LINKCAPTION_ADMINLOGSVIEW", "Logs betrachten");
 define("LANG_LICENSE", "Lizenzierung");
 
 

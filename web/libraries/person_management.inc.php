@@ -27,6 +27,12 @@ require_once(dirname(__FILE__)."/database.inc.php");
 
 
 
+define("PERSON_STATUS_UNKNOWN", 0);
+define("PERSON_STATUS_ACTIVE", 1);
+define("PERSON_STATUS_TRASHED", 2);
+
+
+
 function GetPersons()
 {
     if (Database::Get()->IsConnected() !== true)
@@ -53,6 +59,7 @@ function GetPersons()
                                               "    `date_of_birth`,\n".
                                               "    `location`,\n".
                                               "    `nationality`,\n".
+                                              "    `status`,\n".
                                               "    `datetime_created`,\n".
                                               "    `datetime_modified`\n".
                                               "FROM `".Database::Get()->GetPrefix()."persons`\n".
@@ -109,6 +116,7 @@ function GetPersonById($id)
                                      "    `date_of_birth`,\n".
                                      "    `location`,\n".
                                      "    `nationality`,\n".
+                                     "    `status`,\n".
                                      "    `datetime_created`,\n".
                                      "    `datetime_modified`\n".
                                      "FROM `".Database::Get()->GetPrefix()."persons`\n".
@@ -166,9 +174,10 @@ function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nati
                                   "    `date_of_birth`,\n".
                                   "    `location`,\n".
                                   "    `nationality`,\n".
+                                  "    `status`,\n".
                                   "    `datetime_created`,\n".
                                   "    `datetime_modified`)\n".
-                                  "VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())\n",
+                                  "VALUES (?, ?, ?, ?, ?, ?, ".PERSON_STATUS_ACTIVE.", NOW(), NOW())\n",
                                   array(NULL, $familyName, $givenName, $dateOfBirth, $location, $nationality),
                                   array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT));
 

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2016  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,26 +16,22 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/en/persons.lang.php
+ * @file $/web/lang/en/note_add.lang.php
  * @author Stephan Kreutzer
- * @since 2014-05-31
+ * @since 2016-12-03
  */
 
 
 
-define("LANG_PAGETITLE", "Persons");
-define("LANG_HEADER", "Persons");
-define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Family Name");
-define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Given Name");
-define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Date of Birth");
-define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Location");
-define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationality");
-define("LANG_TABLECOLUMNCAPTION_STATUS", "Status");
-define("LANG_TABLECOLUMNCAPTION_ACTION", "Action");
-define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
-define("LANG_LINKCAPTION_ADDPERSON", "Add person");
-define("LANG_LINKCAPTION_MAINPAGE", "Leave");
+define("LANG_PAGETITLE", "Add note");
+define("LANG_HEADER", "Add note");
+define("LANG_CATEGORY", "Category");
+define("LANG_PRIORITY", "Priority");
+define("LANG_SUBMITBUTTON", "OK");
+define("LANG_BACK", "Cancel");
+define("LANG_AGAIN", "Add another note");
+define("LANG_OPERATIONSUCCEEDED", "Note added successfully.");
+define("LANG_OPERATIONFAILED", "Was unable to add the note.");
 define("LANG_LICENSE", "Licensing");
 
 

@@ -76,6 +76,7 @@ if (Database::Get()->IsConnected() !== true)
 $logs = Database::Get()->QueryUnsecure("SELECT `".Database::Get()->GetPrefix()."logs`.`id`,\n".
                                        "    `".Database::Get()->GetPrefix()."logs`.`datetime`,\n".
                                        "    `".Database::Get()->GetPrefix()."logs`.`text`,\n".
+                                       "    `".Database::Get()->GetPrefix()."users`.`id` AS `user_id`,\n".
                                        "    `".Database::Get()->GetPrefix()."users`.`name` AS `user_name`\n".
                                        "FROM `".Database::Get()->GetPrefix()."logs`\n".
                                        "INNER JOIN `".Database::Get()->GetPrefix()."users`\n".
@@ -103,7 +104,7 @@ if (is_array($logs) === true)
                  "              <td>".htmlspecialchars($log['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
                  "              <td>".htmlspecialchars($log['datetime'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
                  "              <td>".htmlspecialchars($log['text'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
-                 "              <td>".htmlspecialchars($log['user_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
+                 "              <td>".htmlspecialchars($log['user_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")." (".htmlspecialchars($log['user_id'], ENT_COMPAT | ENT_HTML401, "UTF-8").")</td>\n".
                  "            </tr>\n";
         }
 

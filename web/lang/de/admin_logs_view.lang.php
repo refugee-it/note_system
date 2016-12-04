@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2016  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,26 +16,19 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/persons.lang.php
+ * @file $/web/lang/de/admin_logs_view.lang.php
  * @author Stephan Kreutzer
- * @since 2014-05-31
+ * @since 2016-12-04
  */
 
 
 
-define("LANG_PAGETITLE", "Personen");
-define("LANG_HEADER", "Personen");
+define("LANG_PAGETITLE", "Logs betrachten");
+define("LANG_HEADER", "Logs betrachten");
 define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_FAMILYNAME", "Nachname");
-define("LANG_TABLECOLUMNCAPTION_GIVENNAME", "Vorname");
-define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Geburtsdatum");
-define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort");
-define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität");
-define("LANG_TABLECOLUMNCAPTION_STATUS", "Status");
-define("LANG_TABLECOLUMNCAPTION_ACTION", "Aktion");
-define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
-define("LANG_LINKCAPTION_ADDPERSON", "Person hinzufügen");
-define("LANG_LINKCAPTION_MAINPAGE", "Verlassen");
+define("LANG_TABLECOLUMNCAPTION_TIMESTAMP", "Zeitstempel");
+define("LANG_TABLECOLUMNCAPTION_TEXT", "Text");
+define("LANG_TABLECOLUMNCAPTION_USERNAME", "Benutzer");
 define("LANG_LICENSE", "Lizenzierung");
 
 

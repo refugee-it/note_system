@@ -129,12 +129,15 @@ if (isset($_POST['name']) !== true ||
 
         if (isset($_SESSION['user_id']) === true)
         {
-            echo "            <form action=\"persons.php\" method=\"post\">\n".
-                 "              <fieldset>\n".
-                 "                <input type=\"submit\" value=\"".LANG_CONTINUEBUTTON."\"/><br/>\n".
-                 "              </fieldset>\n".
-                 "            </form>\n".
-                 "            <form action=\"index.php\" method=\"post\">\n".
+            echo "            <a href=\"persons.php\">".LANG_LINKCAPTION_PERSONS."</a><br/>\n";
+
+            if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+            {
+                echo "            <a href=\"admin_user_create.php\">".LANG_LINKCAPTION_ADMINUSERCREATE."</a><br/>\n".
+                     "            <a href=\"admin_logs_view.php\">".LANG_LINKCAPTION_ADMINLOGSVIEW."</a><br/>\n";
+            }
+
+            echo "            <form action=\"index.php\" method=\"post\">\n".
                  "              <fieldset>\n".
                  "                <input type=\"submit\" name=\"logout\" value=\"".LANG_BUTTON_LOGOUT."\"/><br/>\n".
                  "              </fieldset>\n".
@@ -204,11 +207,7 @@ else
              "            <p class=\"error\">\n".
              "              ".LANG_LOGINFAILED."\n".
              "            </p>\n".
-             "            <form action=\"index.php\" method=\"post\">\n".
-             "              <fieldset>\n".
-             "                <input type=\"submit\" value=\"".LANG_RETRYLOGINBUTTON."\"/><br/>\n".
-             "              </fieldset>\n".
-             "            </form>\n".
+             "            <a href=\"index.php\">".LANG_LINKCAPTION_RETRYLOGIN."</a>\n".
              "          </div>\n".
              "        </div>\n".
              "        <div class=\"footerbox\">\n".
@@ -235,11 +234,7 @@ else
                  "            <p class=\"error\">\n".
                  "              ".LANG_LOGINFAILED."\n".
                  "            </p>\n".
-                 "            <form action=\"index.php\" method=\"post\">\n".
-                 "              <fieldset>\n".
-                 "                <input type=\"submit\" value=\"".LANG_RETRYLOGINBUTTON."\"/><br/>\n".
-                 "              </fieldset>\n".
-                 "            </form>\n".
+                 "            <a href=\"index.php\">".LANG_LINKCAPTION_RETRYLOGIN."</a>\n".
                  "          </div>\n".
                  "        </div>\n".
                  "        <div class=\"footerbox\">\n".
@@ -266,11 +261,7 @@ else
              "            <p class=\"success\">\n".
              "              ".LANG_LOGINSUCCESS."\n".
              "            </p>\n".
-             "            <form action=\"persons.php\" method=\"post\">\n".
-             "              <fieldset>\n".
-             "                <input type=\"submit\" value=\"".LANG_CONTINUEBUTTON."\"/><br/>\n".
-             "              </fieldset>\n".
-             "            </form>\n".
+             "            <a href=\"index.php\">".LANG_LINKCAPTION_CONTINUE."</a>\n".
              "          </div>\n".
              "        </div>\n".
              "        <div class=\"footerbox\">\n".

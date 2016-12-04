@@ -462,6 +462,7 @@ else if ($step == 3)
                         "  `date_of_birth` date,".
                         "  `location` varchar(255) COLLATE utf8_bin,".
                         "  `nationality` int(11),".
+                        "  `status` int(11) NOT NULL,".
                         "  `datetime_created` datetime NOT NULL,".
                         "  `datetime_modified` datetime NOT NULL,".
                         "  PRIMARY KEY (`id`)".
@@ -497,7 +498,10 @@ else if ($step == 3)
 
                 $sql .= "`".Database::Get()->GetPrefix()."notes` (".
                         "  `id` int(11) NOT NULL AUTO_INCREMENT,".
+                        "  `category` int(11) NOT NULL,".
                         "  `text` text COLLATE utf8_bin NOT NULL,".
+                        "  `priority` int(11) NOT NULL,".
+                        "  `status` int(11) NOT NULL,".
                         "  `datetime_created` datetime NOT NULL,".
                         "  `datetime_modified` datetime NOT NULL,".
                         "  `id_person` int(11) NOT NULL,".

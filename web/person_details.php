@@ -33,6 +33,14 @@ if (isset($_SESSION['user_id']) !== true)
     exit(-1);
 }
 
+require_once("./libraries/user_defines.inc.php");
+
+if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
+    (int)$_SESSION['user_role'] !== USER_ROLE_USER)
+{
+    exit(-1);
+}
+
 $personId = null;
 
 if (isset($_GET['id']) === true)
@@ -56,15 +64,7 @@ else
 require_once("./libraries/languagelib.inc.php");
 require_once(getLanguageFile("person_details"));
 require_once("./libraries/person_management.inc.php");
-require_once("./libraries/user_defines.inc.php");
 
-$displayNonpublicData = false;
-
-if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-    (int)$_SESSION['user_role'] === USER_ROLE_USER)
-{
-    $displayNonpublicData = true;
-}
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "<!DOCTYPE html\n".
@@ -100,7 +100,7 @@ if (is_array($person) === true)
          "              <div class=\"tr\">\n".
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_ID."</span> <span class=\"td\">".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
 
-    if ($displayNonpublicData === true)
+    if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
     {
         echo "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_DATEOFBIRTH."</span> <span class=\"td bday\">".htmlspecialchars($person['date_of_birth'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
     }
@@ -110,10 +110,10 @@ if (is_array($person) === true)
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_FAMILYNAME."</span> <span class=\"family-name td\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_PLACEOFLIVING."</span> <span class=\"td\">".htmlspecialchars($person['location'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".
          "              </div>\n".
-         "              <div class=\"tr\">".
+         "              <div class=\"tr\">\n".
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_GIVENNAME."</span> <span class=\"given-name td\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
 
-    if ($displayNonpublicData === true)
+    if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
     {
         require_once("./custom/nationality.inc.php");
 
@@ -124,8 +124,73 @@ if (is_array($person) === true)
          "            </div>\n";
 }
 
-echo "            <a href=\"persons.php\" class=\"noprint\">".LANG_LINKCAPTION_PERSONS."</a>\n".
-     "          </div>\n".
+echo "            <a href=\"note_add.php?person_id=".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_LINKCAPTION_ADDNOTE."</a>\n".
+     "            <a href=\"persons.php\" class=\"noprint\">".LANG_LINKCAPTION_PERSONS."</a>\n";
+
+require_once("./libraries/note_management.inc.php");
+
+$notes = GetNotes($personId);
+
+if (is_array($notes) === true)
+{
+    if (count($notes) > 0)
+    {
+        require_once("./custom/note_category.inc.php");
+
+        $categories = GetNoteCategoryDefinitions();
+        $categoriesCached = array();
+
+        if (is_array($categories) === true)
+        {
+            if (count($categories) > 0)
+            {
+                foreach ($categories as $category)
+                {
+                    $categoriesCached[$category->getId()] = $category->getName();
+                }
+            }
+            else
+            {
+                $categories = null;
+            }
+        }
+        else
+        {
+            $categories = null;
+        }
+
+        echo "              <div>\n";
+
+        foreach ($notes as $note)
+        {
+            if ((int)$note['status'] != NOTE_STATUS_ACTIVE &&
+                (int)$_SESSION['user_role'] != USER_ROLE_ADMIN)
+            {
+                continue;
+            }
+
+            echo "                <hr/>\n".
+                 "                ".LANG_CAPTION_PRIORITY." ".$note['priority']."<br/>\n";
+
+            if (array_key_exists((int)$note['category'], $categoriesCached) === true)
+            {
+                echo "                ".LANG_CAPTION_CATEGORY." ".GetNoteCategoryDisplayNameById($note['category'])."<br/>\n";
+            }
+            else
+            {
+                echo "                ".LANG_CAPTION_CATEGORY." ".$note['category']."<br/>\n";
+            }
+
+            echo "                <p>\n".
+                 "                  ".$note['text']."\n".
+                 "                </p>\n";
+        }
+    }
+
+    echo "              </div>\n";
+}
+
+echo "          </div>\n".
      "        </div>\n".
      "        <div class=\"footerbox\">\n".
      "          <a href=\"license.php\" class=\"footerbox_link\">".LANG_LICENSE."</a>\n".

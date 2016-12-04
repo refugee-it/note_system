@@ -35,9 +35,12 @@ define("LANG_SUBMITBUTTON", "OK");
 define("LANG_DBCONNECTFAILED", "Can't connect to database.");
 define("LANG_LOGINSUCCESS", "Login was successful!");
 define("LANG_LOGINFAILED", "Password incorrect!");
-define("LANG_CONTINUEBUTTON", "Continue");
+define("LANG_LINKCAPTION_PERSONS", "Persons");
+define("LANG_LINKCAPTION_CONTINUE", "Continue");
 define("LANG_BUTTON_LOGOUT", "Log out");
-define("LANG_RETRYLOGINBUTTON", "Retry");
+define("LANG_LINKCAPTION_RETRYLOGIN", "Retry");
+define("LANG_LINKCAPTION_ADMINUSERCREATE", "Create new user");
+define("LANG_LINKCAPTION_ADMINLOGSVIEW", "View logs");
 define("LANG_LICENSE", "Licensing");
 
 
