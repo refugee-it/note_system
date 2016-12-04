@@ -73,7 +73,7 @@ function GetNoteCategoryDefinitions()
                  new NoteCategoryDefinition(9, "work", 8),
                  new NoteCategoryDefinition(10, "finances", 7),
                  new NoteCategoryDefinition(11, "flat_renting", 6),
-                 new NoteCategoryDefinition(12, "livestock_request", 5),
+                 new NoteCategoryDefinition(12, "errands", 5),
                  new NoteCategoryDefinition(13, "information_request", 4),
                  new NoteCategoryDefinition(14, "freetime_activities", 3));
 }

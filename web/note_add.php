@@ -232,40 +232,6 @@ if ($createSuccess !== true)
          "              <input type=\"text\" name=\"priority\" value=\"".htmlspecialchars($priority, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"10\" maxlength=\"10\"/> ".LANG_PRIORITY."<br/>\n".
          "              <textarea name=\"text\" rows=\"24\" cols=\"80\">".htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, "UTF-8")."</textarea><br/>\n";
 
-/*
-         "              <input type=\"text\" name=\"family_name\" value=\"".htmlspecialchars($familyName, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_FAMILYNAMEFIELD_CAPTION."<br/>\n".
-         "              <input type=\"text\" name=\"given_name\" value=\"".htmlspecialchars($givenName, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_GIVENNAMEFIELD_CAPTION."<br/>\n";
-
-    if ($displayNonpublicData === true)
-    {
-        echo "              <input type=\"text\" name=\"date_of_birth\" value=\"".htmlspecialchars($dateOfBirth, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_DATEOFBIRTHFIELD_CAPTION."<br/>\n";
-    }
-
-    echo "              <input type=\"text\" name=\"location\" value=\"".htmlspecialchars($location, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"20\" maxlength=\"254\"/> ".LANG_LOCATIONFIELD_CAPTION."<br/>\n";
-
-    if ($displayNonpublicData === true)
-    {
-        echo "              <select name=\"nationality\" size=\"1\">\n";
-
-        require_once("./custom/nationality.inc.php");
-
-        $nationalities = GetNationalityDefinitions();
-
-        foreach ($nationalities as $id => $value)
-        {
-            echo "                <option value=\"".$id."\"";
-
-            if ((int)$nationality === (int)$id)
-            {
-                echo " selected=\"selected\"";
-            }
-
-            echo ">".GetNationalityDisplayName($value)."</option>\n";
-        }
-
-        echo "              </select>\n";
-    }
-*/
     echo "              <input type=\"submit\" name=\"save\" value=\"".LANG_SUBMITBUTTON."\"/>\n".
          "            </fieldset>\n".
          "          </form>\n".

@@ -35,6 +35,8 @@ define("LANG_LINKCAPTION_ADDNOTE", "Add note");
 define("LANG_LINKCAPTION_PERSONS", "Leave");
 define("LANG_CAPTION_PRIORITY", "Priority:");
 define("LANG_CAPTION_CATEGORY", "Category:");
+define("LANG_CAPTION_NOTECREATED", "Created:");
+define("LANG_CAPTION_NOTEMODIFIED", "Updated:");
 define("LANG_LICENSE", "Licensing");
 
 

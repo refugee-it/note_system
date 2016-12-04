@@ -124,7 +124,7 @@ if (is_array($person) === true)
          "            </div>\n";
 }
 
-echo "            <a href=\"note_add.php?person_id=".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_LINKCAPTION_ADDNOTE."</a>\n".
+echo "            <a href=\"note_add.php?person_id=".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\" class=\"noprint\">".LANG_LINKCAPTION_ADDNOTE."</a>\n".
      "            <a href=\"persons.php\" class=\"noprint\">".LANG_LINKCAPTION_PERSONS."</a>\n";
 
 require_once("./libraries/note_management.inc.php");
@@ -181,7 +181,9 @@ if (is_array($notes) === true)
                 echo "                ".LANG_CAPTION_CATEGORY." ".$note['category']."<br/>\n";
             }
 
-            echo "                <p>\n".
+            echo "                ".LANG_CAPTION_NOTECREATED." ".$note['datetime_created']."<br/>\n".
+                 "                ".LANG_CAPTION_NOTEMODIFIED." ".$note['datetime_modified']."<br/>\n".
+                 "                <p>\n".
                  "                  ".$note['text']."\n".
                  "                </p>\n";
         }

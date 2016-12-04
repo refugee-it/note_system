@@ -124,15 +124,47 @@ var tsorter = (function()
             {
                 case "link":
                     return function(row){
-                        return that.getCell(row).firstChild.firstChild.nodeValue;
+                        if (typeof that.getCell(row).firstChild != 'undefined') {
+                            if (that.getCell(row).firstChild != null) {
+                                if (typeof that.getCell(row).firstChild.firstChild != 'undefined') {
+                                    if (that.getCell(row).firstChild.firstChild != null) {
+                                        return that.getCell(row).firstChild.firstChild.nodeValue;
+                                    } else {
+                                        return null;
+                                    }
+                                } else {
+                                    return null;
+                                }
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
                     };
                 case "input":
                     return function(row){
-                        return that.getCell(row).firstChild.value;
+                        if (typeof that.getCell(row).firstChild != 'undefined') {
+                            if (that.getCell(row).firstChild != null) {
+                                return that.getCell(row).firstChild.value;
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
                     };
                 case "numeric":
                     return function(row){
-                        return parseFloat( that.getCell(row).firstChild.nodeValue.replace(/\D/g,''), 10 );
+                        if (typeof that.getCell(row).firstChild != 'undefined') {
+                            if (that.getCell(row).firstChild != null) {
+                                return parseFloat( that.getCell(row).firstChild.nodeValue.replace(/\D/g,''), 10 );
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
                     };
                 case "date":
                     return function(row){
@@ -146,7 +178,15 @@ var tsorter = (function()
                     };
                 default: /* Plain Text */
                     return function(row){
-                        return that.getCell(row).firstChild.nodeValue.toLowerCase();
+                        if (typeof that.getCell(row).firstChild != 'undefined') {
+                            if (typeof that.getCell(row).firstChild != null) {
+                                return that.getCell(row).firstChild.nodeValue.toLowerCase();
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
                     };
             }
         },
