@@ -96,7 +96,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "      </div>\n".
      "      <div class=\"mainbox_body\">\n";
 
-require_once("./custom/note_category.inc.php");
+require_once("./libraries/note_category.inc.php");
 
 $categories = GetNoteCategoryDefinitions();
 
@@ -173,7 +173,7 @@ if ($personId != null &&
 {
     require_once("./libraries/note_management.inc.php");
 
-    $id = AttachNewNode($personId, $categoryId, $priority, $text);
+    $id = AttachNewNode($personId, $categoryId, $priority, $text, (int)$_SESSION['user_id']);
 
     if ($id > 0)
     {
@@ -230,9 +230,8 @@ if ($createSuccess !== true)
 
     echo "              </select> ".LANG_CATEGORY."<br/>\n".
          "              <input type=\"text\" name=\"priority\" value=\"".htmlspecialchars($priority, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" size=\"10\" maxlength=\"10\"/> ".LANG_PRIORITY."<br/>\n".
-         "              <textarea name=\"text\" rows=\"24\" cols=\"80\">".htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, "UTF-8")."</textarea><br/>\n";
-
-    echo "              <input type=\"submit\" name=\"save\" value=\"".LANG_SUBMITBUTTON."\"/>\n".
+         "              <textarea name=\"text\" rows=\"24\" cols=\"80\">".htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, "UTF-8")."</textarea><br/>\n".
+         "              <input type=\"submit\" name=\"save\" value=\"".LANG_SUBMITBUTTON."\"/>\n".
          "            </fieldset>\n".
          "          </form>\n".
          "        </div>\n".

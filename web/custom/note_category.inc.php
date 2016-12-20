@@ -23,34 +23,6 @@
  */
 
 
-class NoteCategoryDefinition
-{
-    public function __construct($id, $name, $defaultPriority)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->default_priority = $defaultPriority;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getDefaultPriority()
-    {
-        return $this->default_priority;
-    }
-
-    protected $id;
-    protected $name;
-    protected $default_priority;
-}
 
 /**
  * @attention Don't change the id of an existing category definitions if you
@@ -76,76 +48,4 @@ function GetNoteCategoryDefinitions()
                  new NoteCategoryDefinition(12, "errands", 5),
                  new NoteCategoryDefinition(13, "information_request", 4),
                  new NoteCategoryDefinition(14, "freetime_activities", 3));
-}
-
-function GetNoteCategoryDisplayNameById($id)
-{
-    require_once(dirname(__FILE__)."/../libraries/languagelib.inc.php");
-    require_once(getLanguageFile("note_category", dirname(__FILE__)));
-
-    $categories = GetNoteCategoryDefinitions();
-
-    foreach ($categories as $category)
-    {
-        if ((int)$category->getId() === (int)$id)
-        {
-            return constant("LANG_CUSTOM_NOTECATEGORY_NAME_".strtoupper($category->getName()));
-        }
-    }
-
-    return null;
-}
-
-function GetNoteCategoryDisplayDescriptionById($id)
-{
-    require_once(dirname(__FILE__)."/../libraries/languagelib.inc.php");
-    require_once(getLanguageFile("note_category", dirname(__FILE__)));
-
-    $categories = GetNoteCategoryDefinitions();
-
-    foreach ($categories as $category)
-    {
-        if ((int)$category->getId() === (int)$id)
-        {
-            return constant("LANG_CUSTOM_NOTECATEGORY_DESCRIPTION_".strtoupper($category->getName()));
-        }
-    }
-
-    return null;
-}
-
-function GetNoteCategoryDisplayNameByName($name)
-{
-    require_once(dirname(__FILE__)."/../libraries/languagelib.inc.php");
-    require_once(getLanguageFile("note_category", dirname(__FILE__)));
-
-    $categories = GetNoteCategoryDefinitions();
-
-    foreach ($categories as $category)
-    {
-        if ($category->getName() == $name)
-        {
-            return constant("LANG_CUSTOM_NOTECATEGORY_NAME_".strtoupper($name));
-        }
-    }
-
-    return null;
-}
-
-function GetNoteCategoryDisplayDescriptionByName($name)
-{
-    require_once(dirname(__FILE__)."/../libraries/languagelib.inc.php");
-    require_once(getLanguageFile("note_category", dirname(__FILE__)));
-
-    $categories = GetNoteCategoryDefinitions();
-
-    foreach ($categories as $category)
-    {
-        if ($category->getName() == $name)
-        {
-            return constant("LANG_CUSTOM_NOTECATEGORY_DESCRIPTION_".strtoupper($name));
-        }
-    }
-
-    return null;
 }

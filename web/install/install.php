@@ -505,6 +505,7 @@ else if ($step == 3)
                         "  `datetime_created` datetime NOT NULL,".
                         "  `datetime_modified` datetime NOT NULL,".
                         "  `id_person` int(11) NOT NULL,".
+                        "  `id_user` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
 

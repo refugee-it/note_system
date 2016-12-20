@@ -135,7 +135,7 @@ if (is_array($notes) === true)
 {
     if (count($notes) > 0)
     {
-        require_once("./custom/note_category.inc.php");
+        require_once("./libraries/note_category.inc.php");
 
         $categories = GetNoteCategoryDefinitions();
         $categoriesCached = array();
@@ -170,19 +170,25 @@ if (is_array($notes) === true)
             }
 
             echo "                <hr/>\n".
-                 "                ".LANG_CAPTION_PRIORITY." ".$note['priority']."<br/>\n";
+                 "                <div class=\"table\">\n".
+                 "                  <div class=\"tr\">\n".
+                 "                    <span class=\"td\">".LANG_CAPTION_NOTEPRIORITY."</span> <span class=\"td\">".$note['priority']."</span>\n";
 
             if (array_key_exists((int)$note['category'], $categoriesCached) === true)
             {
-                echo "                ".LANG_CAPTION_CATEGORY." ".GetNoteCategoryDisplayNameById($note['category'])."<br/>\n";
+                echo "                    <span class=\"td\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".GetNoteCategoryDisplayNameById($note['category'])."</span>\n";
             }
             else
             {
-                echo "                ".LANG_CAPTION_CATEGORY." ".$note['category']."<br/>\n";
+                echo "                    <span class=\"td\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".$note['category']."</span>\n";
             }
 
-            echo "                ".LANG_CAPTION_NOTECREATED." ".$note['datetime_created']."<br/>\n".
-                 "                ".LANG_CAPTION_NOTEMODIFIED." ".$note['datetime_modified']."<br/>\n".
+            echo "                  </div>\n".
+                 "                  <div class=\"tr\">\n".
+                 "                    <span class=\"td\">".LANG_CAPTION_NOTEOWNER."</span> <span class=\"td\">".$note['user_name']."</span>\n".
+                 "                    <span class=\"td\">".LANG_CAPTION_NOTEMODIFIED."</span> <span class=\"td\">".$note['datetime_modified']."</span>\n".
+                 "                  </div>\n".
+                 "                </div>\n".
                  "                <p>\n".
                  "                  ".$note['text']."\n".
                  "                </p>\n";

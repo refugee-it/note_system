@@ -33,10 +33,10 @@ define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Wohnort:");
 define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationalität:");
 define("LANG_LINKCAPTION_ADDNOTE", "Notiz hinzufügen");
 define("LANG_LINKCAPTION_PERSONS", "Verlassen");
-define("LANG_CAPTION_NOTECREATED", "Angelegt:");
+define("LANG_CAPTION_NOTEPRIORITY", "Priorität:");
+define("LANG_CAPTION_NOTECATEGORY", "Kategorie:");
+define("LANG_CAPTION_NOTEOWNER", "Autor:");
 define("LANG_CAPTION_NOTEMODIFIED", "Aktualisiert:");
-define("LANG_CAPTION_PRIORITY", "Priorität:");
-define("LANG_CAPTION_CATEGORY", "Kategorie:");
 define("LANG_LICENSE", "Lizenzierung");
 
 

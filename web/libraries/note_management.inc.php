@@ -53,16 +53,20 @@ function GetNotes($personId)
         return -3;
     }
 
-    $notes = Database::Get()->Query("SELECT `id`,\n".
-                                    "    `category`,\n".
-                                    "    `text`,\n".
-                                    "    `priority`,\n".
-                                    "    `status`,\n".
-                                    "    `datetime_created`,\n".
-                                    "    `datetime_modified`\n".
+    $notes = Database::Get()->Query("SELECT `".Database::Get()->GetPrefix()."notes`.`id`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`category`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`text`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`priority`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`status`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`datetime_created`,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`datetime_modified`,\n".
+                                    "    `".Database::Get()->GetPrefix()."users`.`name` AS `user_name`\n".
                                     "FROM `".Database::Get()->GetPrefix()."notes`\n".
-                                    "WHERE `id_person`=?\n".
-                                    "ORDER BY `priority` DESC, `datetime_created` DESC\n",
+                                    "INNER JOIN `".Database::Get()->GetPrefix()."users`\n".
+                                    "ON `".Database::Get()->GetPrefix()."notes`.`id_user`=`".Database::Get()->GetPrefix()."users`.`id`\n".
+                                    "WHERE `".Database::Get()->GetPrefix()."notes`.`id_person`=?\n".
+                                    "ORDER BY `".Database::Get()->GetPrefix()."notes`.`priority` DESC,\n".
+                                    "    `".Database::Get()->GetPrefix()."notes`.`datetime_created` DESC\n",
                                     array($personId),
                                     array(Database::TYPE_INT));
 
@@ -80,7 +84,7 @@ function GetNotes($personId)
     return $notes;
 }
 
-function AttachNewNode($personId, $category, $priority, $text)
+function AttachNewNode($personId, $category, $priority, $text, $userId)
 {
     /** @todo Check for empty parameters. */
 
@@ -113,10 +117,11 @@ function AttachNewNode($personId, $category, $priority, $text)
                                   "    `status`,\n".
                                   "    `datetime_created`,\n".
                                   "    `datetime_modified`,\n".
-                                  "    `id_person`)\n".
-                                  "VALUES (?, ?, ?, ?, ".NOTE_STATUS_ACTIVE.", NOW(), NOW(), ?)\n",
-                                  array(NULL, $category, $text, $priority, $personId),
-                                  array(Database::TYPE_NULL, Database::TYPE_INT, Database::TYPE_STRING, Database::TYPE_INT, Database::TYPE_INT));
+                                  "    `id_person`,\n".
+                                  "    `id_user`)\n".
+                                  "VALUES (?, ?, ?, ?, ".NOTE_STATUS_ACTIVE.", NOW(), NOW(), ?, ?)\n",
+                                  array(NULL, $category, $text, $priority, $personId, $userId),
+                                  array(Database::TYPE_NULL, Database::TYPE_INT, Database::TYPE_STRING, Database::TYPE_INT, Database::TYPE_INT, Database::TYPE_INT));
 
     if ($id <= 0)
     {
