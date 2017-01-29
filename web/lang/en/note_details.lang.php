@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,28 +16,31 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/en/note_add.lang.php
+ * @file $/web/lang/en/note_details.lang.php
  * @author Stephan Kreutzer
- * @since 2016-12-03
+ * @since 2016-11-26
  */
 
 
 
-define("LANG_PAGETITLE", "Add note");
-define("LANG_HEADER", "Add note");
-define("LANG_CATEGORY", "Category");
-define("LANG_PRIORITY", "Priority");
+define("LANG_PAGETITLE", "Note");
+define("LANG_HEADER", "Note");
+define("LANG_LINKCAPTION_PERSON", "Leave");
+define("LANG_LINKCAPTION_UPDATENOTE", "Edit");
+define("LANG_LINKCAPTION_DELETENOTE", "Delete");
+define("LANG_CAPTION_NOTEPRIORITY", "Priority:");
+define("LANG_CAPTION_NOTECATEGORY", "Category:");
+define("LANG_CAPTION_NOTEOWNER", "Author:");
+define("LANG_CAPTION_NOTEMODIFIED", "Updated:");
+define("LANG_CAPTION_NOTEMARKINGS", "Markings:");
+define("LANG_CAPTION_NOTEASSIGNED", "Assigned:");
+define("LANG_ASSIGNBUTTON", "assign");
+define("LANG_UNASSIGNBUTTON", "unassign");
+define("LANG_OPERATIONFAILED", "Operation failed!");
 define("LANG_FLAGINFORMATIVE", "Information");
 define("LANG_FLAGNEEDINFORMATION", "Information Request");
 define("LANG_FLAGNEEDACTION", "Todo");
 define("LANG_FLAGURGENT", "urgent");
-define("LANG_SUBMITBUTTON", "OK");
-define("LANG_BACK", "Cancel");
-define("LANG_DONE", "Done");
-define("LANG_AGAIN", "Add another note");
-define("LANG_OPERATIONSUCCEEDED", "Note added successfully.");
-define("LANG_OPERATIONFAILED", "Was unable to add the note.");
-define("LANG_ADDNOTENOTEXT", "No text provided for this notice.");
 define("LANG_LICENSE", "Licensing");
 
 

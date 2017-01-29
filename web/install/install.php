@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2013-2016  Christian Huke, Stephan Kreutzer
+/* Copyright (C) 2013-2017  Christian Huke, Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -502,11 +502,49 @@ else if ($step == 3)
                         "  `text` text COLLATE utf8_bin NOT NULL,".
                         "  `priority` int(11) NOT NULL,".
                         "  `status` int(11) NOT NULL,".
+                        "  `flags` int(11) NOT NULL,".
                         "  `datetime_created` datetime NOT NULL,".
                         "  `datetime_modified` datetime NOT NULL,".
+                        "  `id_user_assigned` int(11),".
                         "  `id_person` int(11) NOT NULL,".
                         "  `id_user` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
+
+                if (Database::Get()->ExecuteUnsecure($sql) !== true)
+                {
+                    $success = false;
+                }
+            }
+
+            // Table notes_stats
+
+            if ($success === true)
+            {
+                if ($dropExistingTables === true)
+                {
+                    if (Database::Get()->ExecuteUnsecure("DROP TABLE IF EXISTS `".Database::Get()->GetPrefix()."notes_stats`") !== true)
+                    {
+                        $success = false;
+                    }
+                }
+            }
+
+            if ($success === true)
+            {
+                $sql = "CREATE TABLE ";
+
+                if ($keepExistingTables === true)
+                {
+                    $sql .= "IF NOT EXISTS ";
+                }
+
+                $sql .= "`".Database::Get()->GetPrefix()."notes_stats` (".
+                        "  `id_person` int(11) NOT NULL,".
+                        "  `flag_needinformation` int(11) NOT NULL,".
+                        "  `flag_needaction` int(11) NOT NULL,".
+                        "  `flag_urgent` int(11) NOT NULL,".
+                        "  UNIQUE KEY (`id_person`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
 
                 if (Database::Get()->ExecuteUnsecure($sql) !== true)

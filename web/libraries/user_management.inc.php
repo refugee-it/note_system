@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2012-2016  Stephan Kreutzer
+/* Copyright (C) 2012-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -93,6 +93,29 @@ function getUserByName($name)
     }
 
     return $user;
+}
+
+function GetUsers()
+{
+    /** @todo Check for empty $name, $password, $email or $role. */
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    $users = Database::Get()->QueryUnsecure("SELECT `id`,\n".
+                                            "    `name`,\n".
+                                            "    `role`\n".
+                                            "FROM `".Database::Get()->GetPrefix()."users`\n".
+                                            "WHERE 1\n");
+
+    if (is_array($users) !== true)
+    {
+        return -2;
+    }
+
+    return $users;
 }
 
 

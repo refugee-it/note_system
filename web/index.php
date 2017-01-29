@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2012-2016  Stephan Kreutzer
+/* Copyright (C) 2012-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -129,7 +129,9 @@ if (isset($_POST['name']) !== true ||
 
         if (isset($_SESSION['user_id']) === true)
         {
-            echo "            <a href=\"persons.php\">".LANG_LINKCAPTION_PERSONS."</a><br/>\n";
+            echo "            <a href=\"tasks_user.php\">".LANG_LINKCAPTION_MYTASKS."</a><br/>\n".
+                 "            <a href=\"tasks_unassigned.php\">".LANG_LINKCAPTION_UNASSIGNEDTASKS."</a><br/>\n".
+                 "            <a href=\"persons.php\">".LANG_LINKCAPTION_PERSONS."</a><br/>\n";
 
             if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
             {

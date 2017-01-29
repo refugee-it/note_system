@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,26 +16,24 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/person_add.lang.php
+ * @file $/web/lang/de/tasks_user.lang.php
  * @author Stephan Kreutzer
- * @since 2016-11-23
+ * @since 2017-01-28
  */
 
 
 
-define("LANG_PAGETITLE", "Person hinzufügen");
-define("LANG_HEADER", "Person hinzufügen");
-define("LANG_FAMILYNAMEFIELD_CAPTION", "Nachname");
-define("LANG_GIVENNAMEFIELD_CAPTION", "Vorname");
-define("LANG_DATEOFBIRTHFIELD_CAPTION", "Geburtsdatum (JJJJ-MM-DD)");
-define("LANG_LOCATIONFIELD_CAPTION", "Wohnort");
-define("LANG_NATIONALITYFIELD_CAPTION", "Nationalität");
-define("LANG_SUBMITBUTTON", "Bestätigen");
-define("LANG_OPERATIONSUCCEEDED", "Person erfolgreich hinzugefügt.");
-define("LANG_OPERATIONFAILED", "Person konnte nicht hinzugefügt werden.");
-define("LANG_ADDNOTENOTEXT", "Kein Text für diese Notiz eingegeben.");
-define("LANG_AGAIN", "Weitere Person hinzufügen");
-define("LANG_BACK", "Abbrechen");
+define("LANG_PAGETITLE", "Meine Aufgaben");
+define("LANG_HEADER", "Meine Aufgaben");
+define("LANG_NOTES_TABLECOLUMNCAPTION_PRIORITY", "Priorität");
+define("LANG_NOTES_TABLECOLUMNCAPTION_CATEGORY", "Kategorie");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MODIFIED", "Aktualisiert");
+define("LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCECREATION", "Tage seit Erfassung");
+define("LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCEMODIFICATION", "Tage seit letzter Änderung");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MARKINGS", "Kennz.");
+define("LANG_NOTES_TABLECOLUMNCAPTION_ACTION", "Aktion");
+define("LANG_LINKCAPTION_NOTEDETAILS", "Details");
+define("LANG_LINKCAPTION_BACK", "Zurück");
 define("LANG_LICENSE", "Lizenzierung");
 
 

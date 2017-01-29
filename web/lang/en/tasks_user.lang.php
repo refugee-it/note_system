@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,28 +16,24 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/en/note_add.lang.php
+ * @file $/web/lang/en/tasks_user.lang.php
  * @author Stephan Kreutzer
- * @since 2016-12-03
+ * @since 2017-01-28
  */
 
 
 
-define("LANG_PAGETITLE", "Add note");
-define("LANG_HEADER", "Add note");
-define("LANG_CATEGORY", "Category");
-define("LANG_PRIORITY", "Priority");
-define("LANG_FLAGINFORMATIVE", "Information");
-define("LANG_FLAGNEEDINFORMATION", "Information Request");
-define("LANG_FLAGNEEDACTION", "Todo");
-define("LANG_FLAGURGENT", "urgent");
-define("LANG_SUBMITBUTTON", "OK");
-define("LANG_BACK", "Cancel");
-define("LANG_DONE", "Done");
-define("LANG_AGAIN", "Add another note");
-define("LANG_OPERATIONSUCCEEDED", "Note added successfully.");
-define("LANG_OPERATIONFAILED", "Was unable to add the note.");
-define("LANG_ADDNOTENOTEXT", "No text provided for this notice.");
+define("LANG_PAGETITLE", "My Tasks");
+define("LANG_HEADER", "My Tasks");
+define("LANG_NOTES_TABLECOLUMNCAPTION_PRIORITY", "Priority");
+define("LANG_NOTES_TABLECOLUMNCAPTION_CATEGORY", "Category");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MODIFIED", "Updated");
+define("LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCECREATION", "Days since Creation");
+define("LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCEMODIFICATION", "Days since last Update");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MARKINGS", "Mark.");
+define("LANG_NOTES_TABLECOLUMNCAPTION_ACTION", "Action");
+define("LANG_LINKCAPTION_NOTEDETAILS", "Details");
+define("LANG_LINKCAPTION_BACK", "Back");
 define("LANG_LICENSE", "Licensing");
 
 

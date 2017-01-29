@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,28 +16,31 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/note_add.lang.php
+ * @file $/web/lang/de/note_details.lang.php
  * @author Stephan Kreutzer
- * @since 2016-12-03
+ * @since 2016-11-26
  */
 
 
 
-define("LANG_PAGETITLE", "Notiz hinzufügen");
-define("LANG_HEADER", "Notiz hinzufügen");
-define("LANG_CATEGORY", "Kategorie");
-define("LANG_PRIORITY", "Priorität");
+define("LANG_PAGETITLE", "Notiz");
+define("LANG_HEADER", "Notiz");
+define("LANG_LINKCAPTION_UPDATENOTE", "Ändern");
+define("LANG_LINKCAPTION_DELETENOTE", "Löschen");
+define("LANG_LINKCAPTION_PERSON", "Verlassen");
+define("LANG_CAPTION_NOTEPRIORITY", "Priorität:");
+define("LANG_CAPTION_NOTECATEGORY", "Kategorie:");
+define("LANG_CAPTION_NOTEOWNER", "Autor:");
+define("LANG_CAPTION_NOTEMODIFIED", "Aktualisiert:");
+define("LANG_CAPTION_NOTEMARKINGS", "Kennzeichnungen:");
+define("LANG_CAPTION_NOTEASSIGNED", "Bearbeiter:");
+define("LANG_ASSIGNBUTTON", "zuweisen");
+define("LANG_UNASSIGNBUTTON", "aufheben");
+define("LANG_OPERATIONFAILED", "Operation fehlgeschlagen!");
 define("LANG_FLAGINFORMATIVE", "Information");
 define("LANG_FLAGNEEDINFORMATION", "Informationsanfrage");
 define("LANG_FLAGNEEDACTION", "Aufgabe");
 define("LANG_FLAGURGENT", "dringend");
-define("LANG_SUBMITBUTTON", "Bestätigen");
-define("LANG_BACK", "Abbrechen");
-define("LANG_DONE", "Fertig");
-define("LANG_AGAIN", "Weitere Notiz hinzufügen");
-define("LANG_OPERATIONSUCCEEDED", "Notiz erfolgreich hinzugefügt.");
-define("LANG_OPERATIONFAILED", "Notiz konnte nicht hinzugefügt werden.");
-define("LANG_ADDNOTENOTEXT", "Kein Text für diese Notiz eingegeben.");
 define("LANG_LICENSE", "Lizenzierung");
 
 

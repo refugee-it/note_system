@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -43,6 +43,7 @@ if (isset($_SESSION['user_role']) !== true)
 require_once("./libraries/languagelib.inc.php");
 require_once(getLanguageFile("persons"));
 require_once("./libraries/person_management.inc.php");
+require_once("./libraries/note_management.inc.php");
 require_once("./libraries/user_defines.inc.php");
 
 $displayNonpublicData = false;
@@ -63,6 +64,12 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"mainstyle.css\"/>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"mainstyle_print.css\"/>\n".
      "        <link rel=\"profile\" href=\"http://microformats.org/profile/hcard\"/>\n".
+     "        <style type=\"text/css\">\n".
+     "          .urgent\n".
+     "          {\n".
+     "              color: red;\n".
+     "          }\n".
+     "        </style>\n".
      "        <script type=\"text/javascript\" src=\"tsorter.js\"></script>\n".
      "        <script type=\"text/javascript\">\n".
      "          window.onload = function() {\n".
@@ -103,7 +110,8 @@ if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
 if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
     (int)$_SESSION['user_role'] === USER_ROLE_USER)
 {
-    echo "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_ACTION."</th>\n";
+    echo "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_MARKINGS."</th>\n".
+         "                  <th class=\"noprint\">".LANG_TABLECOLUMNCAPTION_ACTION."</th>\n";
 }
 
 echo "                </tr>\n".
@@ -111,6 +119,7 @@ echo "                </tr>\n".
      "              <tbody>\n";
 
 $persons = GetPersons();
+$notesStats = GetNotesStats();
 
 if (is_array($persons) === true)
 {
@@ -169,6 +178,57 @@ if (is_array($persons) === true)
         if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
             (int)$_SESSION['user_role'] === USER_ROLE_USER)
         {
+            if (is_array($notesStats) === true)
+            {
+                if (array_key_exists((int)$person['id'], $notesStats) === true)
+                {
+                    $personNotesStats = $notesStats[$person['id']];
+                    $flagsString = "";
+
+                    if ((int)$personNotesStats['flag_needaction'] > 0)
+                    {
+                        if (!empty($flagsString))
+                        {
+                            $flagsString .= " ";
+                        }
+
+                        $flagsString .= "!";
+                    }
+
+                    if ((int)$personNotesStats['flag_needinformation'] > 0)
+                    {
+                        if (!empty($flagsString))
+                        {
+                            $flagsString .= " ";
+                        }
+
+                        $flagsString .= "?";
+                    }
+
+                    if (!empty($flagsString))
+                    {
+                        if ((int)$personNotesStats['flag_urgent'] > 0)
+                        {
+                            $flagsString = "<span class=\"urgent\">".$flagsString."</span>";
+                        }
+                    }
+
+                    echo "                  <td class=\"noprint\">".$flagsString."</td>\n";
+                }
+                else
+                {
+                    echo "                  <td class=\"noprint\"></td>\n";
+                }
+            }
+            else if ((int)$notesStats === 1)
+            {
+                echo "                  <td class=\"noprint\"></td>\n";
+            }
+            else
+            {
+                echo "                  <td class=\"noprint\">X</td>\n";
+            }
+
             echo "                  <td class=\"noprint\"><a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a></td>\n";
         }
 

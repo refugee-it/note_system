@@ -16,10 +16,10 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/note_add.php
- * @brief Add a note to a person.
+ * @file $/web/note_update.php
+ * @brief Edit an existing note.
  * @author Stephan Kreutzer
- * @since 2016-12-03
+ * @since 2017-01-09
  */
 
 
@@ -49,13 +49,13 @@ if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
     exit(-1);
 }
 
-$personId = null;
+$noteId = null;
 
-if (isset($_GET['person_id']) === true)
+if (isset($_GET['id']) === true)
 {
-    if (is_numeric($_GET['person_id']) === true)
+    if (is_numeric($_GET['id']) === true)
     {
-        $personId = (int)$_GET['person_id'];
+        $noteId = (int)$_GET['id'];
     }
     else
     {
@@ -69,20 +69,35 @@ else
     exit(-1);
 }
 
-require_once(dirname(__FILE__)."/libraries/person_management.inc.php");
+require_once(dirname(__FILE__)."/libraries/note_management.inc.php");
 
-$person = GetPersonById($personId);
+$note = GetNoteById($noteId);
 
-if (is_array($person) !== true)
+if (is_array($note) !== true)
 {
     header("HTTP/1.1 404 Not Found");
     exit(1);
 }
 
+if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
+    (int)$note['id_user'] !== (int)$_SESSION['user_id'])
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit(1);
+}
+
+if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
+    (int)$note['status'] !== NOTE_STATUS_ACTIVE)
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit(1);
+}
+
+$personId = (int)$note['id_person'];
 
 
 require_once("./libraries/languagelib.inc.php");
-require_once(getLanguageFile("note_add"));
+require_once(getLanguageFile("note_update"));
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "<!DOCTYPE html\n".
@@ -103,10 +118,6 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
 
 require_once("./libraries/note_category.inc.php");
 
-$categories = GetNoteCategoryDefinitions();
-
-$categoryId = null;
-
 $priority = null;
 
 if (isset($_POST['priority']) === true)
@@ -123,6 +134,28 @@ if (isset($_POST['priority']) === true)
     }
 }
 
+if ($priority == null)
+{
+    if (!empty($note['priority']))
+    {
+        if (is_numeric($note['priority']) === true)
+        {
+            $priority = (int)$note['priority'];
+        }
+        else
+        {
+            $priority = null;
+        }
+    }
+    else
+    {
+        $priority = null;
+    }
+}
+
+$categories = GetNoteCategoryDefinitions();
+$categoryId = null;
+
 if (isset($_POST['category']) === true)
 {
     $categoryId = $_POST['category'];
@@ -137,17 +170,30 @@ if (isset($_POST['category']) === true)
             if ($category->getId() === $categoryId)
             {
                 $found = true;
-
-                if ($priority === null)
-                {
-                    $priority = (int)$category->getDefaultPriority();
-                }
-
                 break;
             }
         }
 
         if ($found !== true)
+        {
+            $categoryId = null;
+        }
+    }
+    else
+    {
+        $categoryId = null;
+    }
+}
+
+if ($categoryId == null)
+{
+    if (!empty($note['category']))
+    {
+        if (is_numeric($note['category']) === true)
+        {
+            $categoryId = (int)$note['category'];
+        }
+        else
         {
             $categoryId = null;
         }
@@ -170,31 +216,68 @@ if (isset($_POST['text']) === true)
     }
 }
 
-require_once("./libraries/note_management.inc.php");
+if ($text == null)
+{
+    if (!empty($note['text']))
+    {
+        $text = $note['text'];
+    }
+    else
+    {
+        $text = null;
+    }
+}
 
 $flagInformativeSet = false;
 $flagNeedinformationSet = false;
 $flagNeedactionSet = false;
 $flagUrgentSet = false;
 
-if (isset($_POST['flag_informative']) === true)
+if (isset($_POST['save']) === true)
 {
-    $flagInformativeSet = true;
-}
+    if (isset($_POST['flag_informative']) === true)
+    {
+        $flagInformativeSet = true;
+    }
 
-if (isset($_POST['flag_needinformation']) === true)
-{
-    $flagNeedinformationSet = true;
-}
+    if (isset($_POST['flag_needinformation']) === true)
+    {
+        $flagNeedinformationSet = true;
+    }
 
-if (isset($_POST['flag_needaction']) === true)
-{
-    $flagNeedactionSet = true;
-}
+    if (isset($_POST['flag_needaction']) === true)
+    {
+        $flagNeedactionSet = true;
+    }
 
-if (isset($_POST['flag_urgent']) === true)
+    if (isset($_POST['flag_urgent']) === true)
+    {
+        $flagUrgentSet = true;
+    }
+}
+else
 {
-    $flagUrgentSet = true;
+    $flagsOld = (int)$note['flags'];
+
+    if (($flagsOld & NOTE_FLAGS_INFORMATIVE) === NOTE_FLAGS_INFORMATIVE)
+    {
+        $flagInformativeSet = true;
+    }
+
+    if (($flagsOld & NOTE_FLAGS_NEEDINFORMATION) === NOTE_FLAGS_NEEDINFORMATION)
+    {
+        $flagNeedinformationSet = true;
+    }
+
+    if (($flagsOld & NOTE_FLAGS_NEEDACTION) === NOTE_FLAGS_NEEDACTION)
+    {
+        $flagNeedactionSet = true;
+    }
+
+    if (($flagsOld & NOTE_FLAGS_URGENT) === NOTE_FLAGS_URGENT)
+    {
+        $flagUrgentSet = true;
+    }
 }
 
 $flags = NOTE_FLAGS_NONE;
@@ -219,24 +302,18 @@ if ($flagUrgentSet === true)
     $flags |= NOTE_FLAGS_URGENT;
 }
 
-$createSuccess = null;
+$updateSuccess = null;
 
-if ($personId != null &&
+if (isset($_POST['save']) === true &&
     $categoryId != null &&
     $text != null)
 {
-    $id = AddNote($personId, $categoryId, $priority, $flags, $text, (int)$_SESSION['user_id']);
+    $userAssignedId = (int)$note['id_user_assigned'];
+    $flagsOld = (int)$note['flags'];
 
-    if ($id > 0)
-    {
-        $createSuccess = true;
-    }
-    else
-    {
-        $createSuccess = false;
-    }
+    $updateSuccess = UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAssignedId, $flagsOld, $text);
 }
-else if ($personId != null &&
+else if (isset($_POST['save']) === true &&
          $categoryId != null &&
          $text == null)
 {
@@ -245,15 +322,14 @@ else if ($personId != null &&
          "        </p>\n";
 }
 
-if ($createSuccess !== null)
+if ($updateSuccess !== null)
 {
-    if ($createSuccess === true)
+    if ($updateSuccess === true)
     {
         echo "        <p>\n".
              "          <span class=\"success\">".LANG_OPERATIONSUCCEEDED."</span>\n".
              "        </p>\n".
-             "        <a href=\"note_add.php?person_id=".htmlspecialchars($personId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_AGAIN."</a>\n".
-             "        <a href=\"person_details.php?id=".htmlspecialchars($personId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_DONE."</a>\n";
+             "        <a href=\"note_details.php?id=".htmlspecialchars($noteId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_BACK."</a>\n";
     }
     else
     {
@@ -263,10 +339,10 @@ if ($createSuccess !== null)
     }
 }
 
-if ($createSuccess !== true)
+if ($updateSuccess !== true)
 {
     echo "        <div>\n".
-         "          <form action=\"note_add.php?person_id=".htmlspecialchars($personId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" method=\"post\">\n".
+         "          <form action=\"note_update.php?id=".htmlspecialchars($noteId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\" method=\"post\">\n".
          "            <fieldset>\n".
          "              <select name=\"category\" size=\"1\">\n";
 
@@ -299,7 +375,7 @@ if ($createSuccess !== true)
          "            </fieldset>\n".
          "          </form>\n".
          "        </div>\n".
-         "        <a href=\"person_details.php?id=".htmlspecialchars($personId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_BACK."</a>\n";;
+         "        <a href=\"note_details.php?id=".htmlspecialchars($noteId, ENT_COMPAT | ENT_HTML401, "UTF-8")."\">".LANG_CANCEL."</a>\n";
 }
 
 echo "      </div>\n".

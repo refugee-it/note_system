@@ -16,8 +16,9 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/person_details.php
- * @brief View details of a person.
+ * @file $/web/tasks_user.php
+ * @brief Displays tasks assigned to the current user.
+ * @details A task is a note which needs action.
  * @author Stephan Kreutzer
  * @since 2014-06-08
  */
@@ -30,6 +31,7 @@ session_start();
 
 if (isset($_SESSION['user_id']) !== true)
 {
+    header("HTTP/1.1 403 Forbidden");
     exit(-1);
 }
 
@@ -38,47 +40,27 @@ require_once("./libraries/user_defines.inc.php");
 if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
     (int)$_SESSION['user_role'] !== USER_ROLE_USER)
 {
+    header("HTTP/1.1 403 Forbidden");
     exit(-1);
 }
-
-$personId = null;
-
-if (isset($_GET['id']) === true)
-{
-    if (is_numeric($_GET['id']) === true)
-    {
-        $personId = (int)$_GET['id'];
-    }
-    else
-    {
-        exit(-1);
-    }
-}
-else
-{
-    exit(-1);
-}
-
 
 
 require_once("./libraries/languagelib.inc.php");
-require_once(getLanguageFile("person_details"));
-require_once("./libraries/person_management.inc.php");
+require_once(getLanguageFile("tasks_user"));
+require_once("./libraries/note_management.inc.php");
 
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "<!DOCTYPE html\n".
      "    PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n".
      "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n".
-     "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:tsorter=\"http://www.terrill.ca/sorting\" xml:lang=\"".getCurrentLanguage()."\" lang=\"".getCurrentLanguage()."\">\n".
+     "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".getCurrentLanguage()."\" lang=\"".getCurrentLanguage()."\">\n".
      "    <head>\n".
      "        <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>\n".
      "        <title>".LANG_PAGETITLE."</title>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"mainstyle.css\"/>\n".
      "        <link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"mainstyle_print.css\"/>\n".
-     "        <link rel=\"profile\" href=\"http://microformats.org/profile/hcard\"/>\n".
      "        <style type=\"text/css\">\n".
-     /** @todo Check, if this is still needed, because mainstyle.css should provide those classes by now. */
      "          .th, .td\n".
      "          {\n".
      "              padding: 0px 10px 0px 0px;\n".
@@ -103,51 +85,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "          </div>\n".
      "          <div class=\"mainbox_body\">\n";
 
-$person = GetPersonById($personId);
-$notes = null;
-
-if (is_array($person) === true)
-{
-    echo "            <div class=\"vcard table\">\n".
-         "              <div class=\"tr\">\n".
-         "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_ID."</span> <span class=\"td\">".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
-
-    if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
-    {
-        echo "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_DATEOFBIRTH."</span> <span class=\"td bday\">".htmlspecialchars($person['date_of_birth'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
-    }
-
-    echo "              </div>\n".
-         "              <div class=\"tr\">\n".
-         "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_FAMILYNAME."</span> <span class=\"family-name td\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".
-         "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_PLACEOFLIVING."</span> <span class=\"td\">".htmlspecialchars($person['location'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".
-         "              </div>\n".
-         "              <div class=\"tr\">\n".
-         "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_GIVENNAME."</span> <span class=\"given-name td\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
-
-    if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
-    {
-        require_once("./custom/nationality.inc.php");
-
-        echo "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_NATIONALITY."</span> <span class=\"td bday\">".GetNationalityDisplayNameById($person['nationality'])."</span>\n";
-    }
-
-    echo "              </div>\n".
-         "            </div>\n".
-         "            <a href=\"note_add.php?person_id=".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\" class=\"noprint\">".LANG_LINKCAPTION_ADDNOTE."</a>\n";
-
-    require_once("./libraries/note_management.inc.php");
-
-    $notes = GetNotes($personId);
-}
-else
-{
-    /** @todo Error message. */
-}
+$notes = GetNotesByAssignedUser((int)$_SESSION['user_id']);
 
 if (is_array($notes) === true)
 {
-    if (count($notes) > 0)
+    if (empty($notes) === false)
     {
         require_once("./libraries/note_category.inc.php");
 
@@ -179,23 +121,17 @@ if (is_array($notes) === true)
              "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_PRIORITY."</th>\n".
              "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_CATEGORY."</th>\n".
              "                  <th tsorter:data-tsorter=\"date\">".LANG_NOTES_TABLECOLUMNCAPTION_MODIFIED."</th>\n".
+             "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCECREATION."</th>\n".
+             "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_DAYSSINCEMODIFICATION."</th>\n".
              "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_MARKINGS."</th>\n".
-             "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_ASSIGNED."</th>\n";
-
-        if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-            (int)$_SESSION['user_role'] === USER_ROLE_USER)
-        {
-            echo "                  <th class=\"noprint\">".LANG_NOTES_TABLECOLUMNCAPTION_ACTION."</th>\n";
-        }
-
-        echo "                </tr>\n".
+             "                  <th class=\"noprint\">".LANG_NOTES_TABLECOLUMNCAPTION_ACTION."</th>\n".
+             "                </tr>\n".
              "              </thead>\n".
              "              <tbody>\n";
 
         foreach ($notes as $note)
         {
-            if ((int)$note['status'] != NOTE_STATUS_ACTIVE &&
-                (int)$_SESSION['user_role'] != USER_ROLE_ADMIN)
+            if ((int)$note['status'] !== NOTE_STATUS_ACTIVE)
             {
                 continue;
             }
@@ -212,15 +148,9 @@ if (is_array($notes) === true)
                 echo "                  <td>".((int)$note['category'])."</td>\n";
             }
 
-            if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
-                (int)$note['status'] !== NOTE_STATUS_ACTIVE)
-            {
-                echo "                  <td><span style=\"text-decoration: line-through;\">".$note['datetime_modified']."</span></td>\n";
-            }
-            else
-            {
-                echo "                  <td>".$note['datetime_modified']."</td>\n";
-            }
+            echo "                  <td>".$note['datetime_modified']."</td>\n".
+                 "                  <td style=\"text-align: right;\">".getTimePassString(strtotime($note['datetime_created']), time())."</td>\n".
+                 "                  <td style=\"text-align: right;\">".getTimePassString(strtotime($note['datetime_modified']), time())."</td>\n";
 
             $flags = (int)$note['flags'];
             $flagsString = "";
@@ -253,8 +183,7 @@ if (is_array($notes) === true)
                 }
             }
 
-            echo "                  <td>".$flagsString."</td>\n".
-                 "                  <td>".htmlspecialchars($note['user_assigned_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+            echo "                  <td>".$flagsString."</td>\n";
 
             if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
                 (int)$_SESSION['user_role'] === USER_ROLE_USER)
@@ -269,8 +198,12 @@ if (is_array($notes) === true)
              "            </table>\n";
     }
 }
+else
+{
+    /** @todo Error message. */
+}
 
-echo "            <a href=\"persons.php\" class=\"noprint\">".LANG_LINKCAPTION_PERSONS."</a>\n".
+echo "            <a href=\"index.php\" class=\"noprint\">".LANG_LINKCAPTION_BACK."</a>\n".
      "          </div>\n".
      "        </div>\n".
      "        <div class=\"footerbox\">\n".
@@ -279,6 +212,41 @@ echo "            <a href=\"persons.php\" class=\"noprint\">".LANG_LINKCAPTION_P
      "    </body>\n".
      "</html>\n";
 
+
+function getTimePassString($start, $end)
+{
+    $timeDiff = $end - $start;
+
+    $seconds = $timeDiff % 60;
+    $timeDiff -= $seconds;
+
+    if ($timeDiff <= 0)
+    {
+        return 0;
+    }
+
+    $timeDiff /= 60;
+    $minutes = $timeDiff % 60;
+    $timeDiff -= $minutes;
+
+    if ($timeDiff <= 0)
+    {
+        return 0;
+    }
+
+    $timeDiff /= 60;
+    $hours = $timeDiff % 24;
+    $timeDiff -= $hours;
+
+    if ($timeDiff <= 0)
+    {
+        return 0;
+    }
+
+    $timeDiff /= 24;
+
+    return $timeDiff;
+}
 
 
 

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,26 +16,22 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/person_add.lang.php
+ * @file $/web/lang/de/note_delete.lang.php
  * @author Stephan Kreutzer
- * @since 2016-11-23
+ * @since 2017-01-26
  */
 
 
 
-define("LANG_PAGETITLE", "Person hinzufügen");
-define("LANG_HEADER", "Person hinzufügen");
-define("LANG_FAMILYNAMEFIELD_CAPTION", "Nachname");
-define("LANG_GIVENNAMEFIELD_CAPTION", "Vorname");
-define("LANG_DATEOFBIRTHFIELD_CAPTION", "Geburtsdatum (JJJJ-MM-DD)");
-define("LANG_LOCATIONFIELD_CAPTION", "Wohnort");
-define("LANG_NATIONALITYFIELD_CAPTION", "Nationalität");
-define("LANG_SUBMITBUTTON", "Bestätigen");
-define("LANG_OPERATIONSUCCEEDED", "Person erfolgreich hinzugefügt.");
-define("LANG_OPERATIONFAILED", "Person konnte nicht hinzugefügt werden.");
-define("LANG_ADDNOTENOTEXT", "Kein Text für diese Notiz eingegeben.");
-define("LANG_AGAIN", "Weitere Person hinzufügen");
-define("LANG_BACK", "Abbrechen");
+define("LANG_PAGETITLE", "Notiz löschen");
+define("LANG_HEADER", "Notiz löschen");
+define("LANG_CONFIRMDELETETEXT", "Soll die Notiz wirklich gelöscht werden?");
+define("LANG_CONFIRMBUTTON", "Bestätigen");
+define("LANG_OPERATIONSUCCEEDED", "Notiz erfolgreich gelöscht.");
+define("LANG_OPERATIONFAILED", "Notiz konnte nicht gelöscht werden.");
+define("LANG_CANCEL", "Abbrechen");
+define("LANG_BACK", "Zurück");
+define("LANG_DONE", "Fertig");
 define("LANG_LICENSE", "Lizenzierung");
 
 

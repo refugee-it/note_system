@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -32,6 +32,7 @@ define("LANG_TABLECOLUMNCAPTION_DATEOFBIRTH", "Date of Birth");
 define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Location");
 define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationality");
 define("LANG_TABLECOLUMNCAPTION_STATUS", "Status");
+define("LANG_TABLECOLUMNCAPTION_MARKINGS", "Mark.");
 define("LANG_TABLECOLUMNCAPTION_ACTION", "Action");
 define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
 define("LANG_LINKCAPTION_ADDPERSON", "Add person");

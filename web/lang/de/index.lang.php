@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -35,6 +35,8 @@ define("LANG_SUBMITBUTTON", "Bestätigen");
 define("LANG_DBCONNECTFAILED", "Problem beim Zugriff auf die Datenbank.");
 define("LANG_LOGINSUCCESS", "Die Anmeldung war erfolgreich!");
 define("LANG_LOGINFAILED", "Die Anmeldung war nicht erfolgreich!");
+define("LANG_LINKCAPTION_MYTASKS", "Meine Aufgaben");
+define("LANG_LINKCAPTION_UNASSIGNEDTASKS", "Offene Aufgaben");
 define("LANG_LINKCAPTION_PERSONS", "Personen");
 define("LANG_LINKCAPTION_CONTINUE", "Weiter");
 define("LANG_BUTTON_LOGOUT", "Abmelden");

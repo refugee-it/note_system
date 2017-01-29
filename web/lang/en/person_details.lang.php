@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2016  Stephan Kreutzer
+/* Copyright (C) 2014-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -33,10 +33,17 @@ define("LANG_TABLECOLUMNCAPTION_PLACEOFLIVING", "Location:");
 define("LANG_TABLECOLUMNCAPTION_NATIONALITY", "Nationality:");
 define("LANG_LINKCAPTION_ADDNOTE", "Add note");
 define("LANG_LINKCAPTION_PERSONS", "Leave");
-define("LANG_CAPTION_NOTEPRIORITY", "Priority:");
-define("LANG_CAPTION_NOTECATEGORY", "Category:");
-define("LANG_CAPTION_NOTEOWNER", "Author:");
-define("LANG_CAPTION_NOTEMODIFIED", "Updated:");
+define("LANG_NOTES_TABLECOLUMNCAPTION_PRIORITY", "Priority");
+define("LANG_NOTES_TABLECOLUMNCAPTION_CATEGORY", "Category");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MODIFIED", "Updated");
+define("LANG_NOTES_TABLECOLUMNCAPTION_ASSIGNED", "Assigned");
+define("LANG_NOTES_TABLECOLUMNCAPTION_MARKINGS", "Mark.");
+define("LANG_NOTES_TABLECOLUMNCAPTION_ACTION", "Action");
+define("LANG_LINKCAPTION_NOTEDETAILS", "Details");
+define("LANG_FLAGINFORMATIVE", "Information");
+define("LANG_FLAGNEEDINFORMATION", "Information Request");
+define("LANG_FLAGNEEDACTION", "Todo");
+define("LANG_FLAGURGENT", "urgent");
 define("LANG_LICENSE", "Licensing");
 
 
