@@ -92,6 +92,28 @@ if (file_exists("./notes_files/".$fileInfo['internal_name']) !== true)
     exit(-1);
 }
 
+
+require_once("./libraries/logging.inc.php");
+
+if (Database::Get()->BeginTransaction() !== true)
+{
+    header("HTTP/1.1 500 Internal Server Error");
+    exit(-1);
+}
+
+if (logEvent("note_file_download.php?id=".$fileId." ('".$fileInfo['display_name']."', '".$fileInfo['internal_name']."').") != 0)
+{
+    header("HTTP/1.1 500 Internal Server Error");
+    exit(-1);
+}
+
+if (Database::Get()->CommitTransaction() !== true)
+{
+    header("HTTP/1.1 500 Internal Server Error");
+    exit(-1);
+}
+
+
 header("Content-Type: application/octet-stream");
 header("Content-Disposition:attachment;filename=".$fileInfo['display_name']);
 
