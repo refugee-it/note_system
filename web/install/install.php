@@ -423,6 +423,7 @@ else if ($step == 3)
                         "  `salt` varchar(255) COLLATE utf8_bin NOT NULL,".
                         "  `password` varchar(255) COLLATE utf8_bin NOT NULL,".
                         "  `role` int(11) NOT NULL,".
+                        "  `last_login` datetime,".
                         "  PRIMARY KEY (`id`),".
                         "  UNIQUE KEY `name` (`name`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
@@ -581,6 +582,45 @@ else if ($step == 3)
                         "  `text` text COLLATE utf8_bin NOT NULL,".
                         "  `id_user` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
+
+                if (Database::Get()->ExecuteUnsecure($sql) !== true)
+                {
+                    $success = false;
+                }
+            }
+
+            // Table notes_uploads
+
+            if ($success === true)
+            {
+                if ($dropExistingTables === true)
+                {
+                    if (Database::Get()->ExecuteUnsecure("DROP TABLE IF EXISTS `".Database::Get()->GetPrefix()."notes_uploads`") !== true)
+                    {
+                        $success = false;
+                    }
+                }
+            }
+
+            if ($success === true)
+            {
+                $sql = "CREATE TABLE ";
+
+                if ($keepExistingTables === true)
+                {
+                    $sql .= "IF NOT EXISTS ";
+                }
+
+                $sql .= "`".Database::Get()->GetPrefix()."notes_uploads` (".
+                        "  `id` int(11) NOT NULL AUTO_INCREMENT,".
+                        "  `display_name` varchar(255) COLLATE utf8_bin NOT NULL,".
+                        "  `internal_name` varchar(255) COLLATE utf8_bin NOT NULL,".
+                        "  `status` int(11) NOT NULL,".
+                        "  `datetime_created` datetime NOT NULL,".
+                        "  `id_note` int(11) NOT NULL,".
+                        "  PRIMARY KEY (`id`),".
+                        "  UNIQUE KEY `internal_name` (`internal_name`)".
                         ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
 
                 if (Database::Get()->ExecuteUnsecure($sql) !== true)

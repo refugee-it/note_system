@@ -35,6 +35,8 @@ define("LANG_SUBMITBUTTON", "Bestätigen");
 define("LANG_DBCONNECTFAILED", "Problem beim Zugriff auf die Datenbank.");
 define("LANG_LOGINSUCCESS", "Die Anmeldung war erfolgreich!");
 define("LANG_LOGINFAILED", "Die Anmeldung war nicht erfolgreich!");
+define("LANG_LASTLOGIN_PRE", "Die letzte Anmeldung erfolgte am ");
+define("LANG_LASTLOGIN_POST", ". Wenn diese Anmeldung nicht durch Sie erfolgte, kontaktieren Sie bitte den Betreiber/Administrator.");
 define("LANG_LINKCAPTION_MYTASKS", "Meine Aufgaben");
 define("LANG_LINKCAPTION_UNASSIGNEDTASKS", "Offene Aufgaben");
 define("LANG_LINKCAPTION_PERSONS", "Personen");

@@ -227,7 +227,8 @@ else
         if ($result[0]['password'] === hash('sha512', $result[0]['salt'].$_POST['passwort']))
         {
             $user = array("id" => (int)$result[0]['id'],
-                          "role" => (int)$result[0]['role']);
+                          "role" => (int)$result[0]['role'],
+                          "last_login" => $result[0]['last_login']);
         }
         else
         {
@@ -258,12 +259,29 @@ else
         require_once("./libraries/logging.inc.php");
         logEvent("User '".$_POST['name']."' logged in.");
 
+        require_once("./libraries/database.inc.php");
+
+        if (Database::Get()->IsConnected() === true)
+        {
+            Database::Get()->ExecuteUnsecure("UPDATE `".Database::Get()->GetPrefix()."users`\n".
+                                             "SET `last_login`=NOW()\n".
+                                             "WHERE `id`=".$user['id']);
+        }
+
         echo "        <div class=\"mainbox\">\n".
              "          <div class=\"mainbox_body\">\n".
              "            <p class=\"success\">\n".
              "              ".LANG_LOGINSUCCESS."\n".
-             "            </p>\n".
-             "            <a href=\"index.php\">".LANG_LINKCAPTION_CONTINUE."</a>\n".
+             "            </p>\n";
+
+        if (!($user['last_login'] == null))
+        {
+            echo "            <p>\n".
+                 "              ".LANG_LASTLOGIN_PRE.$user['last_login'].LANG_LASTLOGIN_POST."\n".
+                 "            </p>\n";
+        }
+
+        echo "            <a href=\"index.php\">".LANG_LINKCAPTION_CONTINUE."</a>\n".
              "          </div>\n".
              "        </div>\n".
              "        <div class=\"footerbox\">\n".

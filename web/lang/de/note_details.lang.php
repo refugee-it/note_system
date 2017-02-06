@@ -26,6 +26,7 @@
 define("LANG_PAGETITLE", "Notiz");
 define("LANG_HEADER", "Notiz");
 define("LANG_LINKCAPTION_UPDATENOTE", "Ändern");
+define("LANG_LINKCAPTION_UPLOADFILE", "Datei hinzufügen");
 define("LANG_LINKCAPTION_DELETENOTE", "Löschen");
 define("LANG_LINKCAPTION_PERSON", "Verlassen");
 define("LANG_CAPTION_NOTEPRIORITY", "Priorität:");
@@ -41,6 +42,9 @@ define("LANG_FLAGINFORMATIVE", "Information");
 define("LANG_FLAGNEEDINFORMATION", "Informationsanfrage");
 define("LANG_FLAGNEEDACTION", "Aufgabe");
 define("LANG_FLAGURGENT", "dringend");
+define("LANG_ATTACHED_FILES", "Verknüpfte Dateien:");
+define("LANG_LINKCAPTION_DOWNLOADFILE", "Herunterladen");
+define("LANG_LINKCAPTION_DELETEFILE", "Löschen");
 define("LANG_LICENSE", "Lizenzierung");
 
 

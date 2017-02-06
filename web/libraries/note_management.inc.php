@@ -37,6 +37,10 @@ define("NOTE_FLAGS_NEEDINFORMATION", 0x2);
 define("NOTE_FLAGS_NEEDACTION", 0x4);
 define("NOTE_FLAGS_URGENT", 0x8);
 
+define("NOTE_UPLOAD_STATUS_UNKNOWN", 0);
+define("NOTE_UPLOAD_STATUS_PUBLIC", 1);
+define("NOTE_UPLOAD_STATUS_TRASHED", 2);
+
 
 
 function GetNotes($personId)
@@ -615,6 +619,8 @@ function UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAss
 
 function GetNoteById($noteId)
 {
+    $noteId = (int)$noteId;
+
     if (Database::Get()->IsConnected() !== true)
     {
         return -1;
@@ -1072,6 +1078,203 @@ function NoteDeAssignUser($noteId, $userId)
     if (Database::Get()->CommitTransaction() !== true)
     {
         return -10;
+    }
+
+    return 0;
+}
+
+function NoteAddUpload($noteId, $serverName, $displayName)
+{
+    /** @todo Check for empty parameters. */
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    $internalName = md5(uniqid(rand(), true));
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("NoteAddUpload(".$noteId.", '".$displayName."', '".$internalName."').") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    $id = Database::Get()->Insert("INSERT INTO `".Database::Get()->GetPrefix()."notes_uploads` (`id`,\n".
+                                  "    `display_name`,\n".
+                                  "    `internal_name`,\n".
+                                  "    `status`,\n".
+                                  "    `datetime_created`,\n".
+                                  "    `id_note`)\n".
+                                  "VALUES (?, ?, ?, ?, NOW(), ?)\n",
+                                  array(NULL, $displayName, $internalName, NOTE_UPLOAD_STATUS_PUBLIC, $noteId),
+                                  array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT, Database::TYPE_INT));
+
+    if ($id <= 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (@move_uploaded_file($serverName, "./notes_files/".$internalName) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -5;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -6;
+    }
+
+    return array("id" => $id,
+                 "internal_name" => $internalName);
+}
+
+function GetNoteUploads($noteId)
+{
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("GetNoteUploads(".$noteId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    $uploads = Database::Get()->Query("SELECT `id`,\n".
+                                      "    `display_name`,\n".
+                                      "    `internal_name`,\n".
+                                      "    `datetime_created`,\n".
+                                      "    `status`\n".
+                                      "FROM `".Database::Get()->GetPrefix()."notes_uploads`\n".
+                                      "WHERE `id_note`=?\n".
+                                      "ORDER BY `datetime_created` ASC\n",
+                                      array($noteId),
+                                      array(Database::TYPE_INT));
+
+    if (is_array($uploads) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -5;
+    }
+
+    return $uploads;
+}
+
+function GetNoteFileById($fileId)
+{
+    $fileId = (int)$fileId;
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("GetNoteFileById(".$fileId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    $file = Database::Get()->Query("SELECT `id`,\n".
+                                   "    `display_name`,\n".
+                                   "    `internal_name`,\n".
+                                   "    `status`,\n".
+                                   "    `datetime_created`,\n".
+                                   "    `id_note`\n".
+                                   "FROM `".Database::Get()->GetPrefix()."notes_uploads`\n".
+                                   "WHERE `id`=?\n",
+                                   array($fileId),
+                                   array(Database::TYPE_INT));
+
+    if (is_array($file) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (empty($file) == true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -5;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -6;
+    }
+
+    return $file[0];
+}
+
+function NoteRemoveUpload($fileId)
+{
+    /** @todo Check for empty parameters. */
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    if (logEvent("NoteRemoveUpload(".$fileId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    $success = Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes_uploads`\n".
+                                        "SET `status`=?\n".
+                                        "WHERE `id`=?",
+                                        array(NOTE_UPLOAD_STATUS_TRASHED, $fileId),
+                                        array(Database::TYPE_INT, Database::TYPE_INT));
+
+    if ($success !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -5;
     }
 
     return 0;

@@ -50,10 +50,11 @@ function insertNewUser($name, $password, $email, $role)
                                   "    `e_mail`,\n".
                                   "    `salt`,\n".
                                   "    `password`,\n".
-                                  "    `role`)\n".
-                                  "VALUES (?, ?, ?, ?, ?, ?)\n",
-                                  array(NULL, $name, $email, $salt, $password, $role),
-                                  array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT));
+                                  "    `role`,\n".
+                                  "    `last_login`)\n".
+                                  "VALUES (?, ?, ?, ?, ?, ?, ?)\n",
+                                  array(NULL, $name, $email, $salt, $password, $role, NULL),
+                                  array(Database::TYPE_NULL, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_STRING, Database::TYPE_INT, Database::TYPE_NULL));
 
     if ($id <= 0)
     {
@@ -81,7 +82,8 @@ function getUserByName($name)
     $user = Database::Get()->Query("SELECT `id`,\n".
                                    "    `salt`,\n".
                                    "    `password`,\n".
-                                   "    `role`\n".
+                                   "    `role`,\n".
+                                   "    `last_login`\n".
                                    "FROM `".Database::Get()->GetPrefix()."users`\n".
                                    "WHERE `name` LIKE ?\n",
                                    array($name),
@@ -106,7 +108,8 @@ function GetUsers()
 
     $users = Database::Get()->QueryUnsecure("SELECT `id`,\n".
                                             "    `name`,\n".
-                                            "    `role`\n".
+                                            "    `role`,\n".
+                                            "    `last_login`\n".
                                             "FROM `".Database::Get()->GetPrefix()."users`\n".
                                             "WHERE 1\n");
 
