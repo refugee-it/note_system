@@ -160,18 +160,18 @@ if (is_array($note) === true)
 
         echo "          <div class=\"table\">\n".
              "            <div class=\"tr\">\n".
-             "              <span class=\"td\">".LANG_CAPTION_NOTEPRIORITY."</span> <span class=\"td\">".$note['priority']."</span>\n";
+             "              <span class=\"th\">".LANG_CAPTION_NOTEPRIORITY."</span> <span class=\"td\">".$note['priority']."</span>\n";
 
         if (array_key_exists((int)$note['category'], $categoriesCached) === true)
         {
-            echo "              <span class=\"td\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".GetNoteCategoryDisplayNameById($note['category'])."</span>\n";
+            echo "              <span class=\"th\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".GetNoteCategoryDisplayNameById($note['category'])."</span>\n";
         }
         else
         {
-            echo "              <span class=\"td\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".$note['category']."</span>\n";
+            echo "              <span class=\"th\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".$note['category']."</span>\n";
         }
 
-        echo "              <span class=\"td\">".LANG_CAPTION_NOTEASSIGNED." </span>\n".
+        echo "              <span class=\"th\">".LANG_CAPTION_NOTEASSIGNED." </span>\n".
              "              <span class=\"td\">\n";
 
         if (is_numeric($note['id_user_assigned']) === true)
@@ -199,9 +199,9 @@ if (is_array($note) === true)
         echo "              </span>\n".
              "            </div>\n".
              "            <div class=\"tr\">\n".
-             "              <span class=\"td\">".LANG_CAPTION_NOTEOWNER."</span> <span class=\"td\">".$note['user_name']."</span>\n".
-             "              <span class=\"td\">".LANG_CAPTION_NOTEMODIFIED."</span> <span class=\"td\">".$note['datetime_modified']."</span>\n".
-             "              <span class=\"td\"></span> <span class=\"td\"></span>\n".
+             "              <span class=\"th\">".LANG_CAPTION_NOTEOWNER."</span> <span class=\"td\">".$note['user_name']."</span>\n".
+             "              <span class=\"th\">".LANG_CAPTION_NOTEMODIFIED."</span> <span class=\"td\">".$note['datetime_modified']."</span>\n".
+             "              <span class=\"th\"></span> <span class=\"td\"></span>\n".
              "            </div>\n".
              "          </div>\n";
 
@@ -251,7 +251,7 @@ if (is_array($note) === true)
         if (!empty($flagsString))
         {
             echo "          <div>\n".
-                 "            ".LANG_CAPTION_NOTEMARKINGS." ".$flagsString."\n".
+                 "            <span class=\"th\">".LANG_CAPTION_NOTEMARKINGS."</span> <span class=\"td\">".$flagsString."</span>\n".
                  "          </div>\n";
         }
 
