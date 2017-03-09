@@ -137,6 +137,93 @@ function GetPersonById($id)
     return $person[0];
 }
 
+function GetPersonsByIds(array $ids)
+{
+    if (is_array($ids) !== true)
+    {
+        return -1;
+    }
+
+    if (empty($ids))
+    {
+        return 1;
+    }
+
+    $idString = "";
+    $whereClause = "";
+    $idList = array();
+    $typeList = array();
+
+    foreach ($ids as $id)
+    {
+        if (!empty($idString))
+        {
+            $idString .= ", ";
+        }
+
+        $idString .= (int)$id;
+
+        if (!empty($whereClause))
+        {
+            $whereClause .= " OR ";
+        }
+
+        $whereClause .= "`id`=?";
+
+        $idList[] = (int)$id;
+        $typeList[] = Database::TYPE_INT;
+    }
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -2;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -3;
+    }
+
+    if (logEvent("GetPersonsByIds(".$idString.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -5;
+    }
+
+    $persons = Database::Get()->Query("SELECT `id`,\n".
+                                      "    `family_name`,\n".
+                                      "    `given_name`,\n".
+                                      "    `date_of_birth`,\n".
+                                      "    `location`,\n".
+                                      "    `nationality`,\n".
+                                      "    `status`,\n".
+                                      "    `datetime_created`,\n".
+                                      "    `datetime_modified`\n".
+                                      "FROM `".Database::Get()->GetPrefix()."persons`\n".
+                                      "WHERE ".$whereClause,
+                                      $idList,
+                                      $typeList);
+
+    if (is_array($persons) !== true)
+    {
+        return -6;
+    }
+
+    if (empty($persons) == true)
+    {
+        return -7;
+    }
+
+    return $persons;
+}
+
 function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nationality)
 {
     /** @todo Check for empty parameters. */

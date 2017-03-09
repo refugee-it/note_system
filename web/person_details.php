@@ -88,6 +88,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "          {\n".
      "              color: red;\n".
      "          }\n".
+     "\n".
+     "          .completed\n".
+     "          {\n".
+     "              color: gray;\n".
+     "          }\n".
      "        </style>\n".
      "        <script type=\"text/javascript\" src=\"tsorter.js\"></script>\n".
      "        <script type=\"text/javascript\">\n".
@@ -213,9 +218,13 @@ if (is_array($notes) === true)
             }
 
             if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
-                (int)$note['status'] !== NOTE_STATUS_ACTIVE)
+                (int)$note['status'] === NOTE_STATUS_TRASHED)
             {
                 echo "                  <td><span style=\"text-decoration: line-through;\">".$note['datetime_modified']."</span></td>\n";
+            }
+            else if ((int)$note['status'] === NOTE_STATUS_COMPLETED)
+            {
+                echo "                  <td><span class=\"completed\">".$note['datetime_modified']."</span></td>\n";
             }
             else
             {

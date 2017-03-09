@@ -91,10 +91,32 @@ if (is_array($notesStats) === true)
 {
     if (empty($notesStats) === false)
     {
+        $personIds = array();
+
+        foreach ($notesStats as $noteStats)
+        {
+            $personIds[] = (int)$noteStats['id_person'];
+        }
+
+        require_once("./libraries/person_management.inc.php");
+
+        $persons = GetPersonsByIds($personIds);
+        $personsById = array();
+
+        if (!empty($persons))
+        {
+            foreach ($persons as $person)
+            {
+                $personsById[(int)$person['id']] = $person;
+            }
+        }
+
         echo "            <table id=\"notesstats_table\">\n".
              "              <thead>\n".
              "                <tr>\n".
-             "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_PERSONID."</th>\n".
+             "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_PERSON_ID."</th>\n".
+             "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_PERSON_FAMILYNAME."</th>\n".
+             "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_PERSON_GIVENNAME."</th>\n".
              "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_URGENT."</th>\n".
              "                  <th tsorter:data-tsorter=\"numeric\">".LANG_NOTES_TABLECOLUMNCAPTION_NEEDACTION."</th>\n".
              "                  <th tsorter:data-tsorter=\"default\">".LANG_NOTES_TABLECOLUMNCAPTION_NEEDINFORMATION."</th>\n".
@@ -107,6 +129,25 @@ if (is_array($notesStats) === true)
         {
             echo "                <tr>\n".
                  "                  <td>".((int)$noteStats['id_person'])."</td>\n";
+
+            if (array_key_exists((int)$noteStats['id_person'], $personsById) === true)
+            {
+                if ((int)$personsById[(int)$noteStats['id_person']]['status'] == PERSON_STATUS_ACTIVE)
+                {
+                    echo "                  <td>".$personsById[(int)$noteStats['id_person']]['family_name']."</td>\n".
+                         "                  <td>".$personsById[(int)$noteStats['id_person']]['given_name']."</td>\n";
+                }
+                else
+                {
+                    echo "                  <td></td>\n".
+                         "                  <td></td>\n";
+                }
+            }
+            else
+            {
+                echo "                  <td></td>\n".
+                     "                  <td></td>\n";
+            }
 
             if ((int)$noteStats['flag_urgent'] > 0)
             {

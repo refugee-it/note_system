@@ -30,6 +30,7 @@ require_once(dirname(__FILE__)."/database.inc.php");
 define("NOTE_STATUS_UNKNOWN", 0);
 define("NOTE_STATUS_ACTIVE", 1);
 define("NOTE_STATUS_TRASHED", 2);
+define("NOTE_STATUS_COMPLETED", 3);
 
 define("NOTE_FLAGS_NONE", 0x0);
 define("NOTE_FLAGS_INFORMATIVE", 0x1);
@@ -1073,6 +1074,86 @@ function NoteDeAssignUser($noteId, $userId)
                 return -13;
             }
         }
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -10;
+    }
+
+    return 0;
+}
+
+function NoteCompleted($noteId, $userId)
+{
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    $note = Database::Get()->Query("SELECT `id`,\n".
+                                   "    `status`,\n".
+                                   "    `flags`,\n".
+                                   "    `id_person`,\n".
+                                   "    `id_user_assigned`\n".
+                                   "FROM `".Database::Get()->GetPrefix()."notes`\n".
+                                   "WHERE `id`=?\n",
+                                   array($noteId),
+                                   array(Database::TYPE_INT));
+
+    if (is_array($note) !== true)
+    {
+        return -2;
+    }
+
+    if (empty($note) == true)
+    {
+        return -3;
+    }
+
+    $note = $note[0];
+
+    if ((int)$note['status'] !== NOTE_STATUS_ACTIVE)
+    {
+        return -4;
+    }
+
+    if (is_numeric($note['id_user_assigned']) != true)
+    {
+        return -5;
+    }
+
+    if ((int)$note['id_user_assigned'] != (int)$userId)
+    {
+        return -6;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -7;
+    }
+
+    if (logEvent("NoteCompleted(".$noteId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -8;
+    }
+
+    $result = Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes`\n".
+                                       "SET `priority`=1,\n".
+                                       "    `flags`=".NOTE_FLAGS_INFORMATIVE.",\n".
+                                       "    `datetime_modified`=NOW(),\n".
+                                       "    `status`=".NOTE_STATUS_COMPLETED."\n".
+                                       "WHERE `id`=?",
+                                       array($noteId),
+                                       array(Database::TYPE_INT));
+
+    if ($result !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -9;
     }
 
     if (Database::Get()->CommitTransaction() !== true)
