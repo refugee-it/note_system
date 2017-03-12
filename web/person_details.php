@@ -91,7 +91,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "\n".
      "          .completed\n".
      "          {\n".
-     "              color: gray;\n".
+     "              color: green;\n".
      "          }\n".
      "        </style>\n".
      "        <script type=\"text/javascript\" src=\"tsorter.js\"></script>\n".
@@ -200,6 +200,7 @@ if (is_array($notes) === true)
         foreach ($notes as $note)
         {
             if ((int)$note['status'] != NOTE_STATUS_ACTIVE &&
+                (int)$note['status'] != NOTE_STATUS_COMPLETED &&
                 (int)$_SESSION['user_role'] != USER_ROLE_ADMIN)
             {
                 continue;

@@ -94,6 +94,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "      {\n".
      "          color: red;\n".
      "      }\n".
+     "\n".
+     "      .completed\n".
+     "      {\n".
+     "          color: green;\n".
+     "      }\n".
      "    </style>\n".
      "  </head>\n".
      "  <body>\n".
@@ -143,6 +148,7 @@ $note = GetNoteById($noteId);
 if (is_array($note) === true)
 {
     if ((int)$note['status'] == NOTE_STATUS_ACTIVE ||
+        (int)$note['status'] == NOTE_STATUS_COMPLETED ||
         (int)$_SESSION['user_role'] == USER_ROLE_ADMIN)
     {
         require_once("./libraries/note_category.inc.php");
@@ -230,7 +236,7 @@ if (is_array($note) === true)
                 $flagsString .= ", ";
             }
 
-            $flagsString .= LANG_STATUSCOMPLETED;
+            $flagsString .= "<span class=\"completed\">".LANG_STATUSCOMPLETED."</span>";
         }
 
         if (($flags & NOTE_FLAGS_URGENT) === NOTE_FLAGS_URGENT)
@@ -352,10 +358,12 @@ if (is_array($note) === true)
         }
     }
 
-    if ((int)$note['status'] === NOTE_STATUS_ACTIVE &&
-        ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-         ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
-          (int)$_SESSION['user_id'] === (int)$note['id_user'])))
+    if (((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
+         ((int)$note['status'] === NOTE_STATUS_ACTIVE ||
+          (int)$note['status'] === NOTE_STATUS_COMPLETED)) ||
+        ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
+         (int)$_SESSION['user_id'] === (int)$note['id_user'] &&
+         (int)$note['status'] === NOTE_STATUS_ACTIVE))
     {
         echo "          <a href=\"note_update.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_UPDATENOTE."</a>\n".
              "          <a href=\"note_delete.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_DELETENOTE."</a>\n";
