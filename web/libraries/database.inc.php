@@ -441,6 +441,21 @@ class Database
         return false;
     }
 
+    public function IsInTransaction()
+    {
+        if ($this->IsConnected() !== true)
+        {
+            return false;
+        }
+
+        if ($this->pdo->inTransaction() === true)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function CommitTransaction()
     {
         if ($this->IsConnected() !== true)

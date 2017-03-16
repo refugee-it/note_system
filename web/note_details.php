@@ -188,37 +188,44 @@ if (is_array($note) === true)
             echo "              <span class=\"th\">".LANG_CAPTION_NOTECATEGORY."</span> <span class=\"td\">".$note['category']."</span>\n";
         }
 
-        echo "              <span class=\"th\">".LANG_CAPTION_NOTEASSIGNED." </span>\n".
-             "              <span class=\"td\">\n";
+        $flags = (int)$note['flags'];
 
-        if ((int)$note['status'] === NOTE_STATUS_ACTIVE)
+        if ((($flags & NOTE_FLAGS_NEEDACTION) === NOTE_FLAGS_NEEDACTION) ||
+            (($flags & NOTE_FLAGS_NEEDINFORMATION) === NOTE_FLAGS_NEEDINFORMATION))
         {
-            if (is_numeric($note['id_user_assigned']) === true)
+            echo "              <span class=\"th\">".LANG_CAPTION_NOTEASSIGNED." </span>\n".
+                 "              <span class=\"td\">\n";
+
+            if ((int)$note['status'] === NOTE_STATUS_ACTIVE)
             {
-                if ((int)$note['id_user_assigned'] === (int)$_SESSION['user_id'])
+                if (is_numeric($note['id_user_assigned']) === true)
                 {
-                    echo "                <form action=\"note_details.php\" method=\"post\">\n".
-                        "                  <input type=\"hidden\" name=\"id\" value=\"".$noteId."\"/>\n".
-                        "                  <input type=\"submit\" name=\"unassign\" value=\"".LANG_UNASSIGNBUTTON."\" class=\"noprint\"/>\n".
-                        "                  <input type=\"submit\" name=\"completed\" value=\"".LANG_COMPLETEDBUTTON."\" class=\"noprint\"/>\n".
-                        "                </form>\n";
+                    if ((int)$note['id_user_assigned'] === (int)$_SESSION['user_id'])
+                    {
+                        echo "                <form action=\"note_details.php\" method=\"post\">\n".
+                             "                  <input type=\"hidden\" name=\"id\" value=\"".$noteId."\"/>\n".
+                             "                  <input type=\"submit\" name=\"unassign\" value=\"".LANG_UNASSIGNBUTTON."\" class=\"noprint\"/>\n".
+                             "                  <input type=\"submit\" name=\"completed\" value=\"".LANG_COMPLETEDBUTTON."\" class=\"noprint\"/>\n".
+                             "                </form>\n";
+                    }
+                    else
+                    {
+                        echo "                ".htmlspecialchars($note['user_assigned_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\n";
+                    }
                 }
                 else
                 {
-                    echo "                ".htmlspecialchars($note['user_assigned_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."\n";
+                    echo "                <form action=\"note_details.php\" method=\"post\">\n".
+                         "                  <input type=\"hidden\" name=\"id\" value=\"".$noteId."\"/>\n".
+                         "                  <input type=\"submit\" name=\"assign\" value=\"".LANG_ASSIGNBUTTON."\" class=\"noprint\"/>\n".
+                         "                </form>\n";
                 }
             }
-            else
-            {
-                echo "                <form action=\"note_details.php\" method=\"post\">\n".
-                    "                  <input type=\"hidden\" name=\"id\" value=\"".$noteId."\"/>\n".
-                    "                  <input type=\"submit\" name=\"assign\" value=\"".LANG_ASSIGNBUTTON."\" class=\"noprint\"/>\n".
-                    "                </form>\n";
-            }
+
+            echo "              </span>\n";
         }
 
-        echo "              </span>\n".
-             "            </div>\n".
+        echo "            </div>\n".
              "            <div class=\"tr\">\n".
              "              <span class=\"th\">".LANG_CAPTION_NOTEOWNER."</span> <span class=\"td\">".$note['user_name']."</span>\n".
              "              <span class=\"th\">".LANG_CAPTION_NOTEMODIFIED."</span> <span class=\"td\">".$note['datetime_modified']."</span>\n".
@@ -226,7 +233,6 @@ if (is_array($note) === true)
              "            </div>\n".
              "          </div>\n";
 
-        $flags = (int)$note['flags'];
         $flagsString = "";
 
         if ((int)$note['status'] === NOTE_STATUS_COMPLETED)

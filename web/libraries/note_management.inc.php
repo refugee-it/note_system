@@ -610,6 +610,17 @@ function UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAss
         }
     }
 
+    if ($userAssignedId > 0 &&
+        ($flags & NOTE_FLAGS_NEEDINFORMATION) !== NOTE_FLAGS_NEEDINFORMATION &&
+        ($flags & NOTE_FLAGS_NEEDACTION) !== NOTE_FLAGS_NEEDACTION)
+    {
+        if (NoteDeAssignUser($noteId, $userAssignedId) !== 0)
+        {
+            Database::Get()->RollbackTransaction();
+            return -14;
+        }
+    }
+
     if (Database::Get()->CommitTransaction() !== true)
     {
         return -13;
@@ -981,9 +992,14 @@ function NoteDeAssignUser($noteId, $userId)
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
-    if (Database::Get()->BeginTransaction() !== true)
+    $inTransaction = Database::Get()->IsInTransaction();
+
+    if ($inTransaction == false)
     {
-        return -7;
+        if (Database::Get()->BeginTransaction() !== true)
+        {
+            return -7;
+        }
     }
 
     if (logEvent("NoteDeAssignUser(".$personId.", ".$noteId.").") != 0)
@@ -997,6 +1013,7 @@ function NoteDeAssignUser($noteId, $userId)
                                        "WHERE `id`=?",
                                        array($noteId),
                                        array(Database::TYPE_INT));
+
     if ($result !== true)
     {
         Database::Get()->RollbackTransaction();
@@ -1076,9 +1093,12 @@ function NoteDeAssignUser($noteId, $userId)
         }
     }
 
-    if (Database::Get()->CommitTransaction() !== true)
+    if ($inTransaction == false)
     {
-        return -10;
+        if (Database::Get()->CommitTransaction() !== true)
+        {
+            return -10;
+        }
     }
 
     return 0;
