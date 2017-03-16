@@ -823,7 +823,8 @@ function NoteAssignUser($noteId, $userId)
     }
 
     $result = Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes`\n".
-                                       "SET `id_user_assigned`=".$userId."\n".
+                                       "SET `id_user_assigned`=".$userId.",\n".
+                                       "    `datetime_modified`=NOW()\n".
                                        "WHERE `id`=?",
                                        array($noteId),
                                        array(Database::TYPE_INT));
@@ -990,8 +991,6 @@ function NoteDeAssignUser($noteId, $userId)
         }
     }
 
-    require_once(dirname(__FILE__)."/logging.inc.php");
-
     $inTransaction = Database::Get()->IsInTransaction();
 
     if ($inTransaction == false)
@@ -1002,6 +1001,8 @@ function NoteDeAssignUser($noteId, $userId)
         }
     }
 
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
     if (logEvent("NoteDeAssignUser(".$personId.", ".$noteId.").") != 0)
     {
         Database::Get()->RollbackTransaction();
@@ -1009,7 +1010,8 @@ function NoteDeAssignUser($noteId, $userId)
     }
 
     $result = Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes`\n".
-                                       "SET `id_user_assigned`=NULL\n".
+                                       "SET `id_user_assigned`=NULL,\n".
+                                       "    `datetime_modified`=NOW()\n".
                                        "WHERE `id`=?",
                                        array($noteId),
                                        array(Database::TYPE_INT));
@@ -1549,7 +1551,8 @@ function DeleteNote($noteId, $status, $flags, $userAssignedId, $personId)
     }
 
     $success = Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes`\n".
-                                        "SET `status`=?\n".
+                                        "SET `status`=?,\n".
+                                        "    `datetime_modified`=NOW()\n".
                                         "WHERE `id`=?",
                                         array(NOTE_STATUS_TRASHED, $noteId),
                                         array(Database::TYPE_INT, Database::TYPE_INT));
@@ -1563,6 +1566,108 @@ function DeleteNote($noteId, $status, $flags, $userAssignedId, $personId)
     if (Database::Get()->CommitTransaction() !== true)
     {
         return -10;
+    }
+
+    return 0;
+}
+
+function DeleteAllNotes($personId)
+{
+    $personId = (int)$personId;
+
+    $notes = Database::Get()->Query("SELECT `id`\n".
+                                    "FROM `".Database::Get()->GetPrefix()."notes`\n".
+                                    "WHERE `id_person`=?\n",
+                                    array($personId),
+                                    array(Database::TYPE_INT));
+
+    if (is_array($notes) !== true)
+    {
+        return -1;
+    }
+
+    if (empty($notes))
+    {
+        return 0;
+    }
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -2;
+    }
+
+    $inTransaction = Database::Get()->IsInTransaction();
+
+    if ($inTransaction == false)
+    {
+        if (Database::Get()->BeginTransaction() !== true)
+        {
+            return -3;
+        }
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (logEvent("DeleteAllNotes(".$personId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    if (Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes`\n".
+                                 "SET `status`=?,\n".
+                                 "    `id_user_assigned`=?,\n".
+                                 "    `datetime_modified`=NOW()\n".
+                                 "WHERE `id_person`=?",
+                                 array(NOTE_STATUS_TRASHED, null, $personId),
+                                 array(Database::TYPE_INT, Database::TYPE_NULL, Database::TYPE_INT)) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -5;
+    }
+
+    $whereClause = "";
+    $valueList = array(NOTE_STATUS_TRASHED);
+    $typeList = array(Database::TYPE_INT);
+
+    foreach ($notes as $note)
+    {
+        if (!empty($whereClause))
+        {
+            $whereClause .= " OR ";
+        }
+
+        $whereClause .= "`id_note`=?";
+        $valueList[] = $note['id'];
+        $typeList[] = Database::TYPE_INT;
+    }
+
+    if (Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."notes_uploads`\n".
+                                 "SET `status`=?\n".
+                                 "WHERE ".$whereClause,
+                                 $valueList,
+                                 $typeList) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -6;
+    }
+
+    if (Database::Get()->Execute("DELETE\n".
+                                 "FROM `".Database::Get()->GetPrefix()."notes_stats`\n".
+                                 "WHERE `id_person`=?",
+                                 array($personId),
+                                 array(Database::TYPE_INT)) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -7;
+    }
+
+    if ($inTransaction == false)
+    {
+        if (Database::Get()->CommitTransaction() !== true)
+        {
+            return -8;
+        }
     }
 
     return 0;

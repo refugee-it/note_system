@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2012-2016  Stephan Kreutzer
+/* Copyright (C) 2012-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -281,6 +281,55 @@ function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nati
 
     return $id;
 }
+
+function DeletePerson($personId)
+{
+    $personId = (int)$personId;
+
+    if (Database::Get()->IsConnected() !== true)
+    {
+        return -1;
+    }
+
+    if (Database::Get()->BeginTransaction() !== true)
+    {
+        return -2;
+    }
+
+    require_once(dirname(__FILE__)."/logging.inc.php");
+
+    if (logEvent("DeletePerson(".$personId.").") != 0)
+    {
+        Database::Get()->RollbackTransaction();
+        return -3;
+    }
+
+    if (Database::Get()->Execute("UPDATE `".Database::Get()->GetPrefix()."persons`\n".
+                                 "SET `status`=?,\n".
+                                 "    `datetime_modified`=NOW()\n".
+                                 "WHERE `id`=?",
+                                 array(PERSON_STATUS_TRASHED, $personId),
+                                 array(Database::TYPE_INT, Database::TYPE_INT)) !== true)
+    {
+        Database::Get()->RollbackTransaction();
+        return -4;
+    }
+
+    require_once(dirname(__FILE__)."/note_management.inc.php");
+
+    if (DeleteAllNotes($personId) !== 0)
+    {
+        return -5;
+    }
+
+    if (Database::Get()->CommitTransaction() !== true)
+    {
+        return -6;
+    }
+
+    return 0;
+}
+
 
 
 ?>

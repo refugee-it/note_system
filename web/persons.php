@@ -69,6 +69,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "          {\n".
      "              color: red;\n".
      "          }\n".
+     "\n".
+     "          .deleted\n".
+     "          {\n".
+     "              text-decoration: line-through;\n".
+     "          }\n".
      "        </style>\n".
      "        <script type=\"text/javascript\" src=\"tsorter.js\"></script>\n".
      "        <script type=\"text/javascript\">\n".
@@ -140,9 +145,18 @@ if (is_array($persons) === true)
         }
 
         echo "                <tr class=\"vcard\">\n".
-             "                  <td>".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
-             "                  <td class=\"family-name\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
-             "                  <td class=\"given-name\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+             "                  <td>".htmlspecialchars($person['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+
+        if ((int)$person['status'] == PERSON_STATUS_TRASHED)
+        {
+            echo "                  <td class=\"family-name deleted\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
+                 "                  <td class=\"given-name deleted\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+        }
+        else
+        {
+            echo "                  <td class=\"family-name\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
+                 "                  <td class=\"given-name\">".htmlspecialchars($person['given_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n";
+        }
 
         if ($displayNonpublicData === true)
         {
@@ -229,7 +243,16 @@ if (is_array($persons) === true)
                 echo "                  <td class=\"noprint\">X</td>\n";
             }
 
-            echo "                  <td class=\"noprint\"><a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a></td>\n";
+            echo "                  <td class=\"noprint\">\n".
+                 "                    <a href=\"person_details.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDETAILS."</a>\n";
+
+            if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
+                (int)$person['status'] === PERSON_STATUS_ACTIVE)
+            {
+                echo "                    <a href=\"person_delete.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDELETE."</a>\n";
+            }
+
+            echo "                  </td>\n";
         }
 
         echo "                </tr>\n";

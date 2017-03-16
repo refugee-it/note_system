@@ -35,6 +35,7 @@ define("LANG_TABLECOLUMNCAPTION_STATUS", "Status");
 define("LANG_TABLECOLUMNCAPTION_MARKINGS", "Kennz.");
 define("LANG_TABLECOLUMNCAPTION_ACTION", "Aktion");
 define("LANG_LINKCAPTION_PERSONDETAILS", "Details");
+define("LANG_LINKCAPTION_PERSONDELETE", "löschen");
 define("LANG_LINKCAPTION_ADDPERSON", "Person hinzufügen");
 define("LANG_LINKCAPTION_MAINPAGE", "Verlassen");
 define("LANG_LICENSE", "Lizenzierung");
