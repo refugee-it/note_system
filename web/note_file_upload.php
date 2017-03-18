@@ -80,18 +80,35 @@ if (is_array($note) !== true)
 }
 
 if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
-    (int)$note['id_user'] !== (int)$_SESSION['user_id'])
-{
-    header("HTTP/1.1 403 Forbidden");
-    exit(1);
-}
-
-if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
     (int)$note['status'] !== NOTE_STATUS_ACTIVE)
 {
     header("HTTP/1.1 403 Forbidden");
     exit(1);
 }
+
+if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN)
+{
+    $access = false;
+
+    if (is_numeric($note['id_user_assigned']) === true)
+    {
+        if ((int)$note['id_user_assigned'] === (int)$_SESSION['user_id'])
+        {
+            $access = true;
+        }
+    }
+    else if ((int)$note['id_user'] === (int)$_SESSION['user_id'])
+    {
+        $access = true;
+    }
+
+    if ($access !== true)
+    {
+        header("HTTP/1.1 403 Forbidden");
+        exit(1);
+    }
+}
+
 
 require_once("./libraries/languagelib.inc.php");
 require_once(getLanguageFile("note_file_upload"));

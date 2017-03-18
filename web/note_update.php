@@ -80,17 +80,33 @@ if (is_array($note) !== true)
 }
 
 if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
-    (int)$note['id_user'] !== (int)$_SESSION['user_id'])
+    (int)$note['status'] !== NOTE_STATUS_ACTIVE)
 {
     header("HTTP/1.1 403 Forbidden");
     exit(1);
 }
 
-if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
-    (int)$note['status'] !== NOTE_STATUS_ACTIVE)
+if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN)
 {
-    header("HTTP/1.1 403 Forbidden");
-    exit(1);
+    $access = false;
+
+    if (is_numeric($note['id_user_assigned']) === true)
+    {
+        if ((int)$note['id_user_assigned'] === (int)$_SESSION['user_id'])
+        {
+            $access = true;
+        }
+    }
+    else if ((int)$note['id_user'] === (int)$_SESSION['user_id'])
+    {
+        $access = true;
+    }
+
+    if ($access !== true)
+    {
+        header("HTTP/1.1 403 Forbidden");
+        exit(1);
+    }
 }
 
 $personId = (int)$note['id_person'];

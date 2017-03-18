@@ -330,11 +330,32 @@ if (is_array($note) === true)
                     $uploadsText .= " <a href=\"note_file_download.php?id=".$upload['id']."\" class=\"noprint\">".LANG_LINKCAPTION_DOWNLOADFILE."</a> ";
 
                     if ((int)$note['status'] === NOTE_STATUS_ACTIVE &&
+                        (int)$upload['status'] === NOTE_UPLOAD_STATUS_PUBLIC &&
                         ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-                         ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
-                          (int)$_SESSION['user_id'] === (int)$note['id_user'])))
+                         ((int)$_SESSION['user_role'] === USER_ROLE_USER)))
                     {
-                        $uploadsText .= "<a href=\"note_file_delete.php?id=".$upload['id']."\" class=\"noprint\">".LANG_LINKCAPTION_DELETEFILE."</a> ";
+                        $showLink = false;
+
+                        if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+                        {
+                            $showLink = true;
+                        }
+                        else if (is_numeric($note['id_user_assigned']) === true)
+                        {
+                            if ((int)$_SESSION['user_id'] === (int)$note['id_user_assigned'])
+                            {
+                                $showLink = true;
+                            }
+                        }
+                        else if ((int)$_SESSION['user_id'] === (int)$note['id_user'])
+                        {
+                            $showLink = true;
+                        }
+
+                        if ($showLink === true)
+                        {
+                            $uploadsText .= "<a href=\"note_file_delete.php?id=".$upload['id']."\" class=\"noprint\">".LANG_LINKCAPTION_DELETEFILE."</a> ";
+                        }
                     }
 
                     $uploadsText .= "</li>\n";
@@ -342,13 +363,33 @@ if (is_array($note) === true)
             }
         }
 
-        if (((int)$note['status'] === NOTE_STATUS_ACTIVE &&
-             ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
-              ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
-               (int)$_SESSION['user_id'] === (int)$note['id_user']))))
+        if ((int)$note['status'] === NOTE_STATUS_ACTIVE &&
+            ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN ||
+             ((int)$_SESSION['user_role'] === USER_ROLE_USER)))
         {
-            $uploadsText = $uploadsText.
-                           "              <li class=\"noprint\"><a href=\"note_file_upload.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_UPLOADFILE."</a></li>\n";
+            $showLink = false;
+
+            if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+            {
+                $showLink = true;
+            }
+            else if (is_numeric($note['id_user_assigned']) === true)
+            {
+                if ((int)$_SESSION['user_id'] === (int)$note['id_user_assigned'])
+                {
+                    $showLink = true;
+                }
+            }
+            else if ((int)$_SESSION['user_id'] === (int)$note['id_user'])
+            {
+                $showLink = true;
+            }
+
+            if ($showLink === true)
+            {
+                $uploadsText = $uploadsText.
+                               "              <li class=\"noprint\"><a href=\"note_file_upload.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_UPLOADFILE."</a></li>\n";
+            }
         }
 
         if (empty($uploadsText) !== true)
@@ -368,11 +409,41 @@ if (is_array($note) === true)
          ((int)$note['status'] === NOTE_STATUS_ACTIVE ||
           (int)$note['status'] === NOTE_STATUS_COMPLETED)) ||
         ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
-         (int)$_SESSION['user_id'] === (int)$note['id_user'] &&
          (int)$note['status'] === NOTE_STATUS_ACTIVE))
     {
-        echo "          <a href=\"note_update.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_UPDATENOTE."</a>\n".
-             "          <a href=\"note_delete.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_DELETENOTE."</a>\n";
+        $showLink = false;
+
+        if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+        {
+            $showLink = true;
+        }
+        else if (is_numeric($note['id_user_assigned']) === true)
+        {
+            if ((int)$_SESSION['user_id'] === (int)$note['id_user_assigned'])
+            {
+                $showLink = true;
+            }
+        }
+        else if ((int)$_SESSION['user_id'] === (int)$note['id_user'])
+        {
+            $showLink = true;
+        }
+
+        if ($showLink === true)
+        {
+            echo "          <a href=\"note_update.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_UPDATENOTE."</a>\n";
+        }
+    }
+
+    if (((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
+         ((int)$note['status'] === NOTE_STATUS_ACTIVE ||
+          (int)$note['status'] === NOTE_STATUS_COMPLETED)) ||
+        ((int)$_SESSION['user_role'] === USER_ROLE_USER &&
+         (int)$_SESSION['user_id'] === (int)$note['id_user'] &&
+         (int)$note['status'] === NOTE_STATUS_ACTIVE &&
+         is_numeric($note['id_user_assigned']) != true))
+    {
+        echo "          <a href=\"note_delete.php?id=".((int)$note['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_DELETENOTE."</a>\n";
     }
 }
 else
