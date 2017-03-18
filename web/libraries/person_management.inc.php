@@ -317,8 +317,9 @@ function DeletePerson($personId)
 
     require_once(dirname(__FILE__)."/note_management.inc.php");
 
-    if (DeleteAllNotes($personId) !== 0)
+    if (DeleteAllNotes($personId, false) !== 0)
     {
+        Database::Get()->RollbackTransaction();
         return -5;
     }
 

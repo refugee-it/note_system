@@ -122,7 +122,7 @@ if (isset($_POST['assign']) === true)
 }
 else if (isset($_POST['unassign']) === true)
 {
-    $success = NoteDeAssignUser($noteId, $_SESSION['user_id']);
+    $success = NoteDeAssignUser($noteId, $_SESSION['user_id'], true);
 
     if ($success !== 0)
     {

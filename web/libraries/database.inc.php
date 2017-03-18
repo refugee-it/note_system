@@ -441,6 +441,7 @@ class Database
         return false;
     }
 
+    /* Requires >= PHP 5.3.3.
     public function IsInTransaction()
     {
         if ($this->IsConnected() !== true)
@@ -455,6 +456,7 @@ class Database
 
         return false;
     }
+    */
 
     public function CommitTransaction()
     {

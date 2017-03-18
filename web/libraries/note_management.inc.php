@@ -614,7 +614,7 @@ function UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAss
         ($flags & NOTE_FLAGS_NEEDINFORMATION) !== NOTE_FLAGS_NEEDINFORMATION &&
         ($flags & NOTE_FLAGS_NEEDACTION) !== NOTE_FLAGS_NEEDACTION)
     {
-        if (NoteDeAssignUser($noteId, $userAssignedId) !== 0)
+        if (NoteDeAssignUser($noteId, $userAssignedId, false) !== 0)
         {
             Database::Get()->RollbackTransaction();
             return -14;
@@ -911,7 +911,7 @@ function NoteAssignUser($noteId, $userId)
     return 0;
 }
 
-function NoteDeAssignUser($noteId, $userId)
+function NoteDeAssignUser($noteId, $userId, $needsTransaction)
 {
     if (Database::Get()->IsConnected() !== true)
     {
@@ -991,9 +991,7 @@ function NoteDeAssignUser($noteId, $userId)
         }
     }
 
-    $inTransaction = Database::Get()->IsInTransaction();
-
-    if ($inTransaction == false)
+    if ($needsTransaction !== false)
     {
         if (Database::Get()->BeginTransaction() !== true)
         {
@@ -1005,7 +1003,11 @@ function NoteDeAssignUser($noteId, $userId)
 
     if (logEvent("NoteDeAssignUser(".$personId.", ".$noteId.").") != 0)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -8;
     }
 
@@ -1018,7 +1020,11 @@ function NoteDeAssignUser($noteId, $userId)
 
     if ($result !== true)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -9;
     }
 
@@ -1073,7 +1079,11 @@ function NoteDeAssignUser($noteId, $userId)
 
             if ($success !== true)
             {
-                Database::Get()->RollbackTransaction();
+                if ($needsTransaction !== false)
+                {
+                    Database::Get()->RollbackTransaction();
+                }
+
                 return -12;
             }
         }
@@ -1089,13 +1099,17 @@ function NoteDeAssignUser($noteId, $userId)
 
             if ($success !== true)
             {
-                Database::Get()->RollbackTransaction();
+                if ($needsTransaction !== false)
+                {
+                    Database::Get()->RollbackTransaction();
+                }
+
                 return -13;
             }
         }
     }
 
-    if ($inTransaction == false)
+    if ($needsTransaction !== false)
     {
         if (Database::Get()->CommitTransaction() !== true)
         {
@@ -1571,7 +1585,7 @@ function DeleteNote($noteId, $status, $flags, $userAssignedId, $personId)
     return 0;
 }
 
-function DeleteAllNotes($personId)
+function DeleteAllNotes($personId, $needsTransaction)
 {
     $personId = (int)$personId;
 
@@ -1596,9 +1610,7 @@ function DeleteAllNotes($personId)
         return -2;
     }
 
-    $inTransaction = Database::Get()->IsInTransaction();
-
-    if ($inTransaction == false)
+    if ($needsTransaction !== false)
     {
         if (Database::Get()->BeginTransaction() !== true)
         {
@@ -1610,7 +1622,11 @@ function DeleteAllNotes($personId)
 
     if (logEvent("DeleteAllNotes(".$personId.").") != 0)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -4;
     }
 
@@ -1622,7 +1638,11 @@ function DeleteAllNotes($personId)
                                  array(NOTE_STATUS_TRASHED, null, $personId),
                                  array(Database::TYPE_INT, Database::TYPE_NULL, Database::TYPE_INT)) !== true)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -5;
     }
 
@@ -1648,7 +1668,11 @@ function DeleteAllNotes($personId)
                                  $valueList,
                                  $typeList) !== true)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -6;
     }
 
@@ -1658,11 +1682,15 @@ function DeleteAllNotes($personId)
                                  array($personId),
                                  array(Database::TYPE_INT)) !== true)
     {
-        Database::Get()->RollbackTransaction();
+        if ($needsTransaction !== false)
+        {
+            Database::Get()->RollbackTransaction();
+        }
+
         return -7;
     }
 
-    if ($inTransaction == false)
+    if ($needsTransaction !== false)
     {
         if (Database::Get()->CommitTransaction() !== true)
         {
