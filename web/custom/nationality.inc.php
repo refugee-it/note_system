@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016  Stephan Kreutzer
+/* Copyright (C) 2016-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -31,14 +31,15 @@
  */
 function GetNationalityDefinitions()
 {
-    return array(0 => "unknown",
-                 1 => "syrian",
-                 2 => "iraqi",
-                 3 => "afghan",
-                 4 => "pakistani",
-                 5 => "gambian",
-                 6 => "kosovar",
-                 7 => "algerian");
+    return array(0  => "unknown",
+                 1  => "syrian",
+                 2  => "iraqi",
+                 3  => "afghan",
+                 4  => "pakistani",
+                 5  => "gambian",
+                 6  => "kosovar",
+                 7  => "algerian",
+                 8  => "somali");
 }
 
 function GetNationalityDisplayName($nationality)

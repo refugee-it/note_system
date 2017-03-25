@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016  Stephan Kreutzer
+/* Copyright (C) 2016-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -31,6 +31,7 @@ define("LANG_CUSTOM_NATIONALITY_PAKISTANI", "Pakistani");
 define("LANG_CUSTOM_NATIONALITY_GAMBIAN", "Gambian");
 define("LANG_CUSTOM_NATIONALITY_KOSOVAR", "Kosovar");
 define("LANG_CUSTOM_NATIONALITY_ALGERIAN", "Algerian");
+define("LANG_CUSTOM_NATIONALITY_SOMALI", "Somali");
 
 
 
