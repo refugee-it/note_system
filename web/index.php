@@ -127,16 +127,20 @@ if (isset($_POST['name']) !== true ||
     {
         require_once("./libraries/user_management.inc.php");
 
-        if (isset($_SESSION['user_id']) === true)
+        if (isset($_SESSION['user_id']) === true &&
+            isset($_SESSION['instance_path']) === true)
         {
-            echo "            <a href=\"tasks_user.php\">".LANG_LINKCAPTION_MYTASKS."</a><br/>\n".
-                 "            <a href=\"tasks_unassigned.php\">".LANG_LINKCAPTION_UNASSIGNEDTASKS."</a><br/>\n".
-                 "            <a href=\"persons.php\">".LANG_LINKCAPTION_PERSONS."</a><br/>\n";
-
-            if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+            if (dirname(__FILE__) === $_SESSION['instance_path'])
             {
-                echo "            <a href=\"admin_user_create.php\">".LANG_LINKCAPTION_ADMINUSERCREATE."</a><br/>\n".
-                     "            <a href=\"admin_logs_view.php\">".LANG_LINKCAPTION_ADMINLOGSVIEW."</a><br/>\n";
+                echo "            <a href=\"tasks_user.php\">".LANG_LINKCAPTION_MYTASKS."</a><br/>\n".
+                     "            <a href=\"tasks_unassigned.php\">".LANG_LINKCAPTION_UNASSIGNEDTASKS."</a><br/>\n".
+                     "            <a href=\"persons.php\">".LANG_LINKCAPTION_PERSONS."</a><br/>\n";
+
+                if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN)
+                {
+                    echo "            <a href=\"admin_user_create.php\">".LANG_LINKCAPTION_ADMINUSERCREATE."</a><br/>\n".
+                         "            <a href=\"admin_logs_view.php\">".LANG_LINKCAPTION_ADMINLOGSVIEW."</a><br/>\n";
+                }
             }
 
             echo "            <form action=\"index.php\" method=\"post\">\n".
@@ -252,6 +256,7 @@ else
 
     if (is_array($user) === true)
     {
+        $_SESSION['instance_path'] = dirname(__FILE__);
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $_POST['name'];
         $_SESSION['user_role'] = $user['role'];

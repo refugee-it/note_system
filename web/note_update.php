@@ -25,20 +25,7 @@
 
 
 require_once("./libraries/https.inc.php");
-
-session_start();
-
-if (isset($_SESSION['user_id']) !== true)
-{
-    header("HTTP/1.1 403 Forbidden");
-    exit(-1);
-}
-
-if (isset($_SESSION['user_role']) !== true)
-{
-    header("HTTP/1.1 403 Forbidden");
-    exit(-1);
-}
+require_once("./libraries/session.inc.php");
 
 require_once("./libraries/user_defines.inc.php");
 

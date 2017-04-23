@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017 Stephan Kreutzer
+/* Copyright (C) 2017 Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,35 +16,45 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/libraries/https.inc.php
+ * @file $/web/libraries/session.inc.php
  * @author Stephan Kreutzer
- * @since 2016-10-23
+ * @since 2017-04-23
  */
 
 
 
-if (isset($_SERVER['HTTPS']) === true)
+if (empty($_SESSION) === true)
 {
-    if ($_SERVER['HTTPS'] === "on")
+    if (@session_start() !== true)
     {
-        define("HTTPS_ENABLED", true);
+        http_response_code(403);
+        exit(-1);
     }
-    else
-    {
-        define("HTTPS_ENABLED", false);
-    }
-}
-else
-{
-    define("HTTPS_ENABLED", false);
 }
 
-if (HTTPS_ENABLED !== true)
+if (isset($_SESSION['user_id']) !== true)
 {
-    header("Location: https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], true, 302);
+    http_response_code(403);
     exit(-1);
 }
 
+if (isset($_SESSION['user_role']) !== true)
+{
+    http_response_code(403);
+    exit(-1);
+}
+
+if (isset($_SESSION['instance_path']) !== true)
+{
+    http_response_code(500);
+    exit(-1);
+}
+
+if (dirname(__FILE__) !== $_SESSION['instance_path']."/libraries")
+{
+    http_response_code(403);
+    exit(-1);
+}
 
 
 

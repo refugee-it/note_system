@@ -25,14 +25,7 @@
 
 
 require_once("./libraries/https.inc.php");
-
-session_start();
-
-if (isset($_SESSION['user_id']) !== true)
-{
-    http_response_code(403);
-    exit(-1);
-}
+require_once("./libraries/session.inc.php");
 
 require_once("./libraries/user_defines.inc.php");
 

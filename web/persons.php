@@ -25,20 +25,7 @@
 
 
 require_once("./libraries/https.inc.php");
-
-session_start();
-
-if (isset($_SESSION['user_id']) !== true)
-{
-    exit(-1);
-}
-
-if (isset($_SESSION['user_role']) !== true)
-{
-    exit(-1);
-}
-
-
+require_once("./libraries/session.inc.php");
 
 require_once("./libraries/languagelib.inc.php");
 require_once(getLanguageFile("persons"));

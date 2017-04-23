@@ -26,7 +26,7 @@
 
 require_once("./libraries/https.inc.php");
 
-session_start();
+@session_start();
 
 require_once("./libraries/languagelib.inc.php");
 require_once(getLanguageFile("license"));
@@ -48,7 +48,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
      "            <h1 class=\"mainbox_header_h1\">".LANG_HEADER."</h1>\n".
      "          </div>\n".
      "          <div class=\"mainbox_body\">\n";
-     
+
 require_once("./license.inc.php");
 echo getHTMLLicenseNotification("license");
 echo "<hr/>\n";
