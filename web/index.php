@@ -256,6 +256,20 @@ else
 
     if (is_array($user) === true)
     {
+        $language = null;
+
+        if (isset($_SESSION['language']) === true)
+        {
+            $language = $_SESSION['language'];
+        }
+
+        $_SESSION = array();
+
+        if ($language != null)
+        {
+            $_SESSION['language'] = $language;
+        }
+
         $_SESSION['instance_path'] = dirname(__FILE__);
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $_POST['name'];
