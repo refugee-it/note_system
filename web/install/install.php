@@ -579,6 +579,7 @@ else if ($step == 3)
                 $sql .= "`".Database::Get()->GetPrefix()."logs` (".
                         "  `id` int(11) NOT NULL AUTO_INCREMENT,".
                         "  `datetime` datetime NOT NULL,".
+                        "  `type` int(11),".
                         "  `text` text COLLATE utf8_bin NOT NULL,".
                         "  `id_user` int(11) NOT NULL,".
                         "  PRIMARY KEY (`id`)".

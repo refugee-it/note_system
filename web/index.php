@@ -38,11 +38,11 @@ if (isset($_POST['logout']) === true &&
 
     if (isset($_SESSION['user_name']) === true)
     {
-        logEvent("User '".$_SESSION['user_name']."' logged out.");
+        logEvent(EVENT_INFO, "User '".$_SESSION['user_name']."' logged out.", array());
     }
     else
     {
-        logEvent("User ".((int)$_SESSION['user_id'])." logged out.");
+        logEvent(EVENT_INFO, "User ".((int)$_SESSION['user_id'])." logged out.", array());
     }
 
     $language = null;
@@ -130,7 +130,9 @@ if (isset($_POST['name']) !== true ||
         if (isset($_SESSION['user_id']) === true &&
             isset($_SESSION['instance_path']) === true)
         {
-            if (dirname(__FILE__) === $_SESSION['instance_path'])
+            $lhs = str_replace("\\", "/", dirname(__FILE__));
+
+            if ($lhs === $_SESSION['instance_path'])
             {
                 echo "            <a href=\"tasks_user.php\">".LANG_LINKCAPTION_MYTASKS."</a><br/>\n".
                      "            <a href=\"tasks_unassigned.php\">".LANG_LINKCAPTION_UNASSIGNEDTASKS."</a><br/>\n".
@@ -270,13 +272,13 @@ else
             $_SESSION['language'] = $language;
         }
 
-        $_SESSION['instance_path'] = dirname(__FILE__);
+        $_SESSION['instance_path'] = str_replace("\\", "/", dirname(__FILE__));
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $_POST['name'];
         $_SESSION['user_role'] = $user['role'];
 
         require_once("./libraries/logging.inc.php");
-        logEvent("User '".$_POST['name']."' logged in.");
+        logEvent(EVENT_INFO, "User '".$_POST['name']."' logged in.", array());
 
         require_once("./libraries/database.inc.php");
 

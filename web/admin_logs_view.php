@@ -69,6 +69,7 @@ if (Database::Get()->IsConnected() !== true)
 
 $logs = Database::Get()->QueryUnsecure("SELECT `".Database::Get()->GetPrefix()."logs`.`id`,\n".
                                        "    `".Database::Get()->GetPrefix()."logs`.`datetime`,\n".
+                                       "    `".Database::Get()->GetPrefix()."logs`.`type`,\n".
                                        "    `".Database::Get()->GetPrefix()."logs`.`text`,\n".
                                        "    `".Database::Get()->GetPrefix()."users`.`id` AS `user_id`,\n".
                                        "    `".Database::Get()->GetPrefix()."users`.`name` AS `user_name`\n".
@@ -81,11 +82,21 @@ if (is_array($logs) === true)
 {
     if (count($logs) > 0)
     {
+        require_once(dirname(__FILE__)."/libraries/event_type_defines.inc.php");
+
+        $crud = array(EVENT_NONE => "NONE",
+                      EVENT_CREATE => "CREATE",
+                      EVENT_READ => "READ",
+                      EVENT_UPDATE => "UPDATE",
+                      EVENT_DELETE => "DELETE",
+                      EVENT_INFO => "INFO");
+
         echo "        <table id=\"logs_table\">\n".
              "          <thead>\n".
              "            <tr>\n".
              "              <th tsorter:data-tsorter=\"numeric\">".LANG_TABLECOLUMNCAPTION_ID."</th>\n".
              "              <th tsorter:data-tsorter=\"date\">".LANG_TABLECOLUMNCAPTION_TIMESTAMP."</th>\n".
+             "              <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_OPERATIONTYPE."</th>\n".
              "              <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_TEXT."</th>\n".
              "              <th tsorter:data-tsorter=\"default\">".LANG_TABLECOLUMNCAPTION_USERNAME."</th>\n".
              "            </tr>\n".
@@ -94,9 +105,12 @@ if (is_array($logs) === true)
 
         foreach ($logs as $log)
         {
+            $type = (int)$log['type'];
+
             echo "            <tr>\n".
                  "              <td>".htmlspecialchars($log['id'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
                  "              <td>".htmlspecialchars($log['datetime'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
+                 "              <td style=\"font-family: monospace;\">".$crud[$type]."</td>\n".
                  "              <td>".htmlspecialchars($log['text'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</td>\n".
                  "              <td>".htmlspecialchars($log['user_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")." (".htmlspecialchars($log['user_id'], ENT_COMPAT | ENT_HTML401, "UTF-8").")</td>\n".
                  "            </tr>\n";

@@ -88,7 +88,7 @@ if (Database::Get()->BeginTransaction() !== true)
     exit(-1);
 }
 
-if (logEvent("note_file_download.php?id=".$fileId." ('".$fileInfo['display_name']."', '".$fileInfo['internal_name']."').") != 0)
+if (logEvent(EVENT_READ, "note_file_download.php", array($fileId, "\"".$fileInfo['display_name']."\"", "\"".$fileInfo['internal_name']."\"")) != 0)
 {
     header("HTTP/1.1 500 Internal Server Error");
     exit(-1);

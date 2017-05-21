@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016  Stephan Kreutzer
+/* Copyright (C) 2016-2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -27,6 +27,7 @@ define("LANG_PAGETITLE", "Logs betrachten");
 define("LANG_HEADER", "Logs betrachten");
 define("LANG_TABLECOLUMNCAPTION_ID", "Id");
 define("LANG_TABLECOLUMNCAPTION_TIMESTAMP", "Timestamp");
+define("LANG_TABLECOLUMNCAPTION_OPERATIONTYPE", "Operation");
 define("LANG_TABLECOLUMNCAPTION_TEXT", "Text");
 define("LANG_TABLECOLUMNCAPTION_USERNAME", "User");
 define("LANG_LICENSE", "Lizenzierung");

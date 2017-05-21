@@ -58,7 +58,7 @@ function GetNotes($personId)
         return -2;
     }
 
-    if (logEvent("GetNotes(".$personId.").") != 0)
+    if (logEvent(EVENT_READ, "GetNotes", array($personId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -155,7 +155,7 @@ function GetNotesByAssignedUser($userId)
         return -2;
     }
 
-    if (logEvent("GetNotesByAssignedUser(".$userId.").") != 0)
+    if (logEvent(EVENT_READ, "GetNotesByAssignedUser", array($userId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -238,7 +238,7 @@ function AddNote($personId, $category, $priority, $flags, $text, $userId)
         return -2;
     }
 
-    if (logEvent("AddNote(".$personId.", ".$category.", ".$priority.", ".$flags.", '".$text."').") != 0)
+    if (logEvent(EVENT_CREATE, "AddNote", array($personId, $category, $priority, $flags, "\"".$text."\"")) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -439,7 +439,7 @@ function UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAss
         return -6;
     }
 
-    if (logEvent("UpdateNote(".$noteId.", ".$personId.", ".$categoryId.", ".$priority.", ".$flags.", '".$text."').") != 0)
+    if (logEvent(EVENT_UPDATE, "UpdateNote", array($noteId, $personId, $categoryId, $priority, $flags, "\"".$text."\"")) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -7;
@@ -645,7 +645,7 @@ function GetNoteById($noteId)
         return -2;
     }
 
-    if (logEvent("GetNoteById(".$noteId.").") != 0)
+    if (logEvent(EVENT_READ, "GetNoteById", array($noteId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -816,7 +816,7 @@ function NoteAssignUser($noteId, $userId)
         return -6;
     }
 
-    if (logEvent("NoteAssignUser(".$personId.", ".$noteId.").") != 0)
+    if (logEvent(EVENT_UPDATE, "NoteAssignUser", array($personId, $noteId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -7;
@@ -1001,7 +1001,7 @@ function NoteDeAssignUser($noteId, $userId, $needsTransaction)
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
-    if (logEvent("NoteDeAssignUser(".$personId.", ".$noteId.").") != 0)
+    if (logEvent(EVENT_UPDATE, "NoteDeAssignUser", array($personId, $noteId)) != 0)
     {
         if ($needsTransaction !== false)
         {
@@ -1171,7 +1171,7 @@ function NoteCompleted($noteId, $userId)
         return -7;
     }
 
-    if (logEvent("NoteCompleted(".$noteId.").") != 0)
+    if (logEvent(EVENT_UPDATE, "NoteCompleted", array($noteId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -8;
@@ -1218,7 +1218,7 @@ function NoteAddUpload($noteId, $serverName, $displayName)
         return -2;
     }
 
-    if (logEvent("NoteAddUpload(".$noteId.", '".$displayName."', '".$internalName."').") != 0)
+    if (logEvent(EVENT_CREATE, "NoteAddUpload", array($noteId, "\"".$displayName."\"", "\"".$internalName."\"")) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -1270,7 +1270,7 @@ function GetNoteUploads($noteId)
         return -2;
     }
 
-    if (logEvent("GetNoteUploads(".$noteId.").") != 0)
+    if (logEvent(EVENT_READ, "GetNoteUploads", array($noteId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -1317,7 +1317,7 @@ function GetNoteFileById($fileId)
         return -2;
     }
 
-    if (logEvent("GetNoteFileById(".$fileId.").") != 0)
+    if (logEvent(EVENT_READ, "GetNoteFileById", array($fileId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -1370,7 +1370,7 @@ function NoteRemoveUpload($fileId)
         return -2;
     }
 
-    if (logEvent("NoteRemoveUpload(".$fileId.").") != 0)
+    if (logEvent(EVENT_DELETE, "NoteRemoveUpload", array($fileId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -1558,7 +1558,7 @@ function DeleteNote($noteId, $status, $flags, $userAssignedId, $personId)
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
-    if (logEvent("DeleteNote(".$noteId.", ".$personId.").") != 0)
+    if (logEvent(EVENT_DELETE, "DeleteNote", array($noteId, $personId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -8;
@@ -1620,7 +1620,7 @@ function DeleteAllNotes($personId, $needsTransaction)
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
-    if (logEvent("DeleteAllNotes(".$personId.").") != 0)
+    if (logEvent(EVENT_DELETE, "DeleteAllNotes", array($personId)) != 0)
     {
         if ($needsTransaction !== false)
         {

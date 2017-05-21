@@ -47,7 +47,7 @@ function GetPersons()
         return -2;
     }
 
-    if (logEvent("GetPersons().") != 0)
+    if (logEvent(EVENT_READ, "GetPersons", array()) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;
@@ -99,7 +99,7 @@ function GetPersonById($id)
         return -3;
     }
 
-    if (logEvent("GetPersonById(".$id.").") != 0)
+    if (logEvent(EVENT_READ, "GetPersonById", array($id)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -4;
@@ -186,7 +186,7 @@ function GetPersonsByIds(array $ids)
         return -3;
     }
 
-    if (logEvent("GetPersonsByIds(".$idString.").") != 0)
+    if (logEvent(EVENT_READ, "GetPersonsByIds", array($idString)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -4;
@@ -249,7 +249,7 @@ function InsertNewPerson($familyName, $givenName, $dateOfBirth, $location, $nati
         return -3;
     }
 
-    if (logEvent("InsertNewPerson('".$familyName."', '".$givenName."', '".$dateOfBirth."', '".$location."', ".((int)$nationality).").") != 0)
+    if (logEvent(EVENT_CREATE, "InsertNewPerson", array("\"".$familyName."\"", "\"".$givenName."\"", $dateOfBirth, "\"".$location."\"", ((int)$nationality))) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -4;
@@ -298,7 +298,7 @@ function DeletePerson($personId)
 
     require_once(dirname(__FILE__)."/logging.inc.php");
 
-    if (logEvent("DeletePerson(".$personId.").") != 0)
+    if (logEvent(EVENT_DELETE, "DeletePerson", array($personId)) != 0)
     {
         Database::Get()->RollbackTransaction();
         return -3;

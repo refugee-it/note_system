@@ -49,3 +49,5 @@ function GetNoteCategoryDefinitions()
                  new NoteCategoryDefinition(13, "information_request", 4),
                  new NoteCategoryDefinition(14, "freetime_activities", 3));
 }
+
+?>

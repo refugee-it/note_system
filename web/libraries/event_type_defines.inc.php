@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2016-2017  Stephan Kreutzer
+/* Copyright (C) 2017  Stephan Kreutzer
  *
  * This file is part of note system for refugee-it.de.
  *
@@ -16,21 +16,19 @@
  * along with note system for refugee-it.de. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file $/web/lang/de/admin_logs_view.lang.php
+ * @file $/web/libraries/event_type_defines.inc.php
  * @author Stephan Kreutzer
- * @since 2016-12-04
+ * @since 2017-05-19
  */
 
 
 
-define("LANG_PAGETITLE", "Logs betrachten");
-define("LANG_HEADER", "Logs betrachten");
-define("LANG_TABLECOLUMNCAPTION_ID", "Id");
-define("LANG_TABLECOLUMNCAPTION_TIMESTAMP", "Zeitstempel");
-define("LANG_TABLECOLUMNCAPTION_OPERATIONTYPE", "Operation");
-define("LANG_TABLECOLUMNCAPTION_TEXT", "Text");
-define("LANG_TABLECOLUMNCAPTION_USERNAME", "Benutzer");
-define("LANG_LICENSE", "Lizenzierung");
+define("EVENT_NONE", 0);
+define("EVENT_CREATE", 1);
+define("EVENT_READ", 2);
+define("EVENT_UPDATE", 3);
+define("EVENT_DELETE", 4);
+define("EVENT_INFO", 5);
 
 
 

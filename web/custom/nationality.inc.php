@@ -62,3 +62,5 @@ function GetNationalityDisplayNameById($id)
 
     return GetNationalityDisplayName($nationalities[$id]);
 }
+
+?>

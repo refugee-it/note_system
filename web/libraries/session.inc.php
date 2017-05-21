@@ -50,10 +50,15 @@ if (isset($_SESSION['instance_path']) !== true)
     exit(-1);
 }
 
-if (dirname(__FILE__) !== $_SESSION['instance_path']."/libraries")
 {
-    http_response_code(403);
-    exit(-1);
+    $lhs = str_replace("\\", "/", dirname(__FILE__));
+    $rhs = str_replace("\\", "/", $_SESSION['instance_path'])."/libraries";
+
+    if ($lhs !== $rhs)
+    {
+        http_response_code(403);
+        exit(-1);
+    }
 }
 
 
