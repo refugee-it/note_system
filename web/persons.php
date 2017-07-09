@@ -236,7 +236,8 @@ if (is_array($persons) === true)
             if ((int)$_SESSION['user_role'] === USER_ROLE_ADMIN &&
                 (int)$person['status'] === PERSON_STATUS_ACTIVE)
             {
-                echo "                    <a href=\"person_delete.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDELETE."</a>\n";
+                echo "                    <a href=\"person_delete.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONDELETE."</a>\n".
+                     "                    <a href=\"person_print.php?id=".((int)$person['id'])."\" class=\"noprint\">".LANG_LINKCAPTION_PERSONPRINT."</a>\n";
             }
 
             echo "                  </td>\n";
