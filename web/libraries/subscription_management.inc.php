@@ -71,7 +71,17 @@ function GetSubscriptions($userId)
         return -2;
     }
 
-    return $subscriptions;
+    $result = array();
+
+    if (count($subscriptions) > 0)
+    {
+        foreach ($subscriptions as $subscription)
+        {
+            $result[] = (int)$subscription['id_person'];
+        }
+    }
+
+    return $result;
 }
 
 function SetSubscription($userId, $personId, $subscribe)
@@ -145,6 +155,16 @@ function SendSubscribedNotification($crud, $name, $personId)
 
     $time = date("c");
     $subscribers = GetSubscribers($personId);
+
+    if (is_array($subscribers) !== true)
+    {
+        return;
+    }
+
+    if (count($subscribers) <= 0)
+    {
+        return;
+    }
 
     foreach ($subscribers as $subscriber)
     {
