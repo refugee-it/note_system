@@ -32,6 +32,7 @@ require_once("./libraries/user_defines.inc.php");
 if ((int)$_SESSION['user_role'] !== USER_ROLE_ADMIN &&
     (int)$_SESSION['user_role'] !== USER_ROLE_USER)
 {
+    http_response_code(403);
     exit(-1);
 }
 
@@ -45,14 +46,55 @@ if (isset($_GET['id']) === true)
     }
     else
     {
+        http_response_code(400);
         exit(-1);
     }
 }
-else
+
+if ($personId == null &&
+    isset($_POST['id']) === true)
 {
+    if (is_numeric($_POST['id']) === true)
+    {
+        $personId = (int)$_POST['id'];
+    }
+    else
+    {
+        http_response_code(400);
+        exit(-1);
+    }
+}
+
+if ($personId == null)
+{
+    http_response_code(422);
     exit(-1);
 }
 
+if (isset($_POST['subscribe']) === true)
+{
+    require_once("./libraries/subscription_management.inc.php");
+
+    if (in_array($personId, $_SESSION['subscriptions']) !== true)
+    {
+        if (SetSubscription((int)$_SESSION['user_id'], $personId, true) === 0)
+        {
+            $_SESSION['subscriptions'][] = $personId;
+        }
+    }
+    else
+    {
+        if (SetSubscription((int)$_SESSION['user_id'], $personId, false) === 0)
+        {
+            $index = array_search($personId, $_SESSION['subscriptions']);
+
+            if ($index !== false)
+            {
+                unset($_SESSION['subscriptions'][$index]);
+            }
+        }
+    }
+}
 
 
 require_once("./libraries/languagelib.inc.php");
@@ -116,7 +158,33 @@ if (is_array($person) === true)
         echo "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_DATEOFBIRTH."</span> <span class=\"td bday\">".htmlspecialchars($person['date_of_birth'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n";
     }
 
-    echo "              </div>\n".
+    $subscribed = false;
+
+    if (isset($_SESSION['subscriptions']) === true)
+    {
+        if (is_array($_SESSION['subscriptions']) === true)
+        {
+            $subscribed = in_array($personId, $_SESSION['subscriptions']);
+        }
+    }
+
+    echo "                <span class=\"th noprint\">".LANG_TABLECOLUMNCAPTION_SUBSCRIPTION."</span>\n".
+         "                <span class=\"td noprint\">\n".
+         "                  <form action=\"person_details.php\" method=\"post\">\n".
+         "                    <input type=\"hidden\" name=\"id\" value=\"".$personId."\"/>\n";
+
+    if ($subscribed === false)
+    {
+        echo "                    <input type=\"submit\" name=\"subscribe\" value=\"".LANG_BUTTON_SUBSCRIPTIONS_ON."\" class=\"noprint\"/>\n";
+    }
+    else
+    {
+        echo "                    <input type=\"submit\" name=\"subscribe\" value=\"".LANG_BUTTON_SUBSCRIPTIONS_OFF."\" class=\"noprint\"/>\n";
+    }
+
+    echo "                  </form>\n".
+         "                </span>\n".
+         "              </div>\n".
          "              <div class=\"tr\">\n".
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_FAMILYNAME."</span> <span class=\"family-name td\">".htmlspecialchars($person['family_name'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".
          "                <span class=\"th\">".LANG_TABLECOLUMNCAPTION_PLACEOFLIVING."</span> <span class=\"td\">".htmlspecialchars($person['location'], ENT_COMPAT | ENT_HTML401, "UTF-8")."</span>\n".

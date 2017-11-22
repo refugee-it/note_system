@@ -277,6 +277,9 @@ else
         $_SESSION['user_name'] = $_POST['name'];
         $_SESSION['user_role'] = $user['role'];
 
+        require_once("./libraries/subscription_management.inc.php");
+        $_SESSION['subscriptions'] = GetSubscriptions($user['id']);
+
         require_once("./libraries/logging.inc.php");
         logEvent(EVENT_INFO, "User '".$_POST['name']."' logged in.", array());
 

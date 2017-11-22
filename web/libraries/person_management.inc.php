@@ -328,6 +328,9 @@ function DeletePerson($personId)
         return -6;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_DELETE, "DeletePerson", $personId);
+
     return 0;
 }
 

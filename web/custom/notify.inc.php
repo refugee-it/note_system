@@ -27,7 +27,7 @@
 
 function GetNotificationDetails()
 {
-    return array( /* "somebody@example.org" => array("AddNote", "UpdateNote", "NoteAssignUser", "NoteDeAssignUser", "NoteCompleted", "NoteAddUpload", "NoteRemoveUpload", "DeleteNote", "DeleteAllNotes", "InsertNewPerson", "DeletePerson"),
+    return array( /* "somebody@example.org" => array("AddNote", "UpdateNote", "NoteAssignUser", "NoteDeAssignUser", "NoteCompleted", "NoteAddUpload", "NoteRemoveUpload", "DeleteNote", "DeleteAllNotes", "InsertNewPerson", "DeletePerson", "PersonSubscribe", "PersonUnSubscribe"),
                      "admin@example.org" => array() */ );
 }
 

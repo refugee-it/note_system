@@ -343,6 +343,9 @@ function AddNote($personId, $category, $priority, $flags, $text, $userId)
         return -5;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_CREATE, "AddNote", $personId);
+
     return $id;
 }
 
@@ -626,6 +629,9 @@ function UpdateNote($noteId, $personId, $categoryId, $priority, $flags, $userAss
         return -13;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_UPDATE, "UpdateNote", $personId);
+
     return true;
 }
 
@@ -908,6 +914,9 @@ function NoteAssignUser($noteId, $userId)
         return -9;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_UPDATE, "NoteAssignUser", $personId);
+
     return 0;
 }
 
@@ -1117,6 +1126,9 @@ function NoteDeAssignUser($noteId, $userId, $needsTransaction)
         }
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_UPDATE, "NoteDeAssignUser", $personId);
+
     return 0;
 }
 
@@ -1197,6 +1209,9 @@ function NoteCompleted($noteId, $userId)
         return -10;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_UPDATE, "NoteCompleted", $personId);
+
     return 0;
 }
 
@@ -1251,6 +1266,9 @@ function NoteAddUpload($noteId, $serverName, $displayName)
         Database::Get()->RollbackTransaction();
         return -6;
     }
+
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_CREATE, "NoteAddUpload", $personId);
 
     return array("id" => $id,
                  "internal_name" => $internalName);
@@ -1393,6 +1411,9 @@ function NoteRemoveUpload($fileId)
         Database::Get()->RollbackTransaction();
         return -5;
     }
+
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_DELETE, "NoteRemoveUpload", $personId);
 
     return 0;
 }
@@ -1582,6 +1603,9 @@ function DeleteNote($noteId, $status, $flags, $userAssignedId, $personId)
         return -10;
     }
 
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_DELETE, "DeleteNote", $personId);
+
     return 0;
 }
 
@@ -1697,6 +1721,9 @@ function DeleteAllNotes($personId, $needsTransaction)
             return -8;
         }
     }
+
+    require_once(dirname(__FILE__)."/subscription_management.inc.php");
+    SendSubscribedNotification(EVENT_DELETE, "DeleteAllNotes", $personId);
 
     return 0;
 }

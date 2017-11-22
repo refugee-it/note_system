@@ -630,6 +630,39 @@ else if ($step == 3)
                 }
             }
 
+            // Table persons_subscribers
+
+            if ($success === true)
+            {
+                if ($dropExistingTables === true)
+                {
+                    if (Database::Get()->ExecuteUnsecure("DROP TABLE IF EXISTS `".Database::Get()->GetPrefix()."persons_subscribers`") !== true)
+                    {
+                        $success = false;
+                    }
+                }
+            }
+
+            if ($success === true)
+            {
+                $sql = "CREATE TABLE ";
+
+                if ($keepExistingTables === true)
+                {
+                    $sql .= "IF NOT EXISTS ";
+                }
+
+                $sql .= "`".Database::Get()->GetPrefix()."persons_subscribers` (".
+                        "  `id_person` int(11) NOT NULL,".
+                        "  `id_user` int(11) NOT NULL".
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
+
+                if (Database::Get()->ExecuteUnsecure($sql) !== true)
+                {
+                    $success = false;
+                }
+            }
+
 
             if ($success === true)
             {
